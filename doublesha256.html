@@ -7,7 +7,7 @@
 
 testDoubleSha256();
 async function testDoubleSha256() {
-/*
+
 	// Hard code for testing
 	const payload_and_prefix = "0488ade4969dd291ec4af4df61193c2b5ff3f3f5e1c46fe2564f6e286d5c45020e1b1783";
 
@@ -28,12 +28,12 @@ async function testDoubleSha256() {
 
 	const pay_and_pre_uint8 = new Uint8Array(pay_and_pre_bytes_arr);
 	console.log('pay_and_pre_uint8: ' + pay_and_pre_uint8);
-*/
-	// Still getting the error with this input somehow!
-	var entropy = new Uint8Array(16);
-	crypto.getRandomValues(entropy)
 
-    const 256_hash_buffer = await crypto.subtle.digest('SHA-256', entropy);
+	// Still getting the error with this input somehow!
+	//var entropy = new Uint8Array(16);
+	//crypto.getRandomValues(entropy);
+
+    const hashBuffer256 = await crypto.subtle.digest('SHA-256', pay_and_pre_uint8);
     //const 256_hash_buffer = await crypto.subtle.digest('SHA-256', pay_and_pre_uint8);
 /*
     //const dbl_256_hash_buffer = await crypto.subtle.digest('SHA-256', 256_hash_buffer);
