@@ -17,9 +17,11 @@ console.log(wordListArray[0])
 // Let's see if we can compute the same checksum that is computed here
 // https://learnmeabitcoin.com/technical/checksum
 
-input = '0488ade4000000000000000000a5877bb24b78d82af212fae3474dafe275383c8ad6929d1e41b0058d89129aba001a0000814dafc5a3695629bf458c3d2f90f0e995d1bb5dbb7c1dd6c50fdde720';
-expected = 'dc7a3ddb';
+/*
+const input = '0488ade4000000000000000000a5877bb24b78d82af212fae3474dafe275383c8ad6929d1e41b0058d89129aba001a0000814dafc5a3695629bf458c3d2f90f0e995d1bb5dbb7c1dd6c50fdde720';
+const expected = 'dc7a3ddb';
 computeChecksum(input);
+*/
 
 // result: dc7a3ddb32f066e669065b8b5f7a57cb9f59c7256f8b8aac22a7db663e5079d8
 // taking the first 4 bytes: dc7a3ddb
@@ -34,8 +36,11 @@ computeChecksum(input);
 // Try data computed at the same learnme serialization site:
 // private key: 1a0000814dafc5a3695629bf458c3d2f90f0e995d1bb5dbb7c1dd6c50fdde720
 // chain code:  a5877bb24b78d82af212fae3474dafe275383c8ad6929d1e41b0058d89129aba
-seed = '571ae597480e9fa150f8d972b6ca27ad9f456bc9c98e41f5d2d15a136f1a549e1cf0dc6cf77441e1b07f3fff32001d3a25f78c4ef8fd4ace10642a41cfefc60f';
+
+/*
+const seed = '571ae597480e9fa150f8d972b6ca27ad9f456bc9c98e41f5d2d15a136f1a549e1cf0dc6cf77441e1b07f3fff32001d3a25f78c4ef8fd4ace10642a41cfefc60f';
 hmac_sha512(seed);
+*/
 
 // Success. Now putting it all together. Test vectors from same website.
 // version:     0488ade4     # puts "xprv" or "xpub" at the start after encoding to base58
@@ -61,29 +66,31 @@ compute_xprv_key(chain_code, private_key);
 // mnemonic = 'neglect time recycle convince produce tiny blue girl senior sense damage uniform'
 // seed = '969dd291ec4af4df61193c2b5ff3f3f5e1c46fe2564f6e286d5c45020e1b1783f10b11bbb8d0e9422fb0adb90ffa16f0b6d01aa765ec3734a0cc4ce3c5291861'
 //
-chain_code = 'f10b11bbb8d0e9422fb0adb90ffa16f0b6d01aa765ec3734a0cc4ce3c5291861';
-private_key= '969dd291ec4af4df61193c2b5ff3f3f5e1c46fe2564f6e286d5c45020e1b1783';
+const chain_code = 'f10b11bbb8d0e9422fb0adb90ffa16f0b6d01aa765ec3734a0cc4ce3c5291861';
+const private_key= '969dd291ec4af4df61193c2b5ff3f3f5e1c46fe2564f6e286d5c45020e1b1783';
 compute_xprv_key(chain_code, private_key);
 
 async function compute_xprv_key(chain, key){
+	console.log('chain: ' + chain);
+	console.log('key: ' + key);
 	// Prepend 00 for private keys
-	priv_key = '00' + key;
+	const priv_key = '00' + key;
 
 	// Start the base58 encoded key with 'xprv'
-	version = '0488ade4';
+	const version = '0488ade4';
 
 	// For Master root extended private key, we start at 0 for several values.
-	depth = '00';
-	index = '00000000';
-	fingerprint = '00000000';
+	const depth = '00';
+	const index = '00000000';
+	const fingerprint = '00000000';
 
-	serialized = version + depth + fingerprint + index + chain + priv_key;
+	const serialized = version + depth + fingerprint + index + chain + priv_key;
 	console.log('serialized: ' + serialized);
-	checksum_long = await computeChecksum(serialized);
-	checksum = checksum_long.substring(0,8);
+	const checksum_long = await computeChecksum(serialized);
+	const checksum = checksum_long.substring(0,8);
 	console.log('checksum: ' + checksum);
-	extended_private_key = convert_to_base58(serialized + checksum);
-	console.log('xprv: ' + extended_private_key);
+	const extended_private_key = convert_to_base58(serialized + checksum);
+	console.log('the xprv: ' + extended_private_key);
 }
 
 // Using previously coded base58 encode
@@ -91,8 +98,8 @@ const base58 = [
       1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
 ];
 function convert_to_base58(hex_num){
-	num = Number('0x' + hex_num);
-    result = '';
+	var num = Number('0x' + hex_num);
+    var result = '';
     var r = ''
     var sb = '';
     while(num > 0){
