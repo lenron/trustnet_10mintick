@@ -18,6 +18,7 @@ async function testDoubleSha256() {
 	// convert to hex str array
 	const pay_and_pre_hex_str_array = new Array;
 	for(var i=0; i <payload_and_prefix.length; i+=2){
+		// I think this might be where the error is.
 		pay_and_pre_hex_str_array.push(payload_and_prefix.substring(i, i+2));
 	}
 	console.log('hex string array: ' + pay_and_pre_hex_str_array);
@@ -29,9 +30,14 @@ async function testDoubleSha256() {
 	console.log('number array: ' + pay_and_pre_bytes_arr);
 
 	const pay_and_pre_uint8 = new Uint8Array(pay_and_pre_bytes_arr);
+	console.log('pay_and_pre_uint8: ' + pay_and_pre_uint8);
 
+	// Still getting the error with this input somehow!
+	var entropy = new Uint8Array(16);
+	crypto.getRandomValues(entropy)
 
-    const 256_hash_buffer = await crypto.subtle.digest('SHA-256', pay_and_pre_uint8);
+    const 256_hash_buffer = await crypto.subtle.digest('SHA-256', entropy);
+    //const 256_hash_buffer = await crypto.subtle.digest('SHA-256', pay_and_pre_uint8);
 /*
     //const dbl_256_hash_buffer = await crypto.subtle.digest('SHA-256', 256_hash_buffer);
     const hashArray = Array.from(new Uint8Array(256_hash_buffer));
