@@ -37,7 +37,21 @@ computeChecksum(input);
 seed = '571ae597480e9fa150f8d972b6ca27ad9f456bc9c98e41f5d2d15a136f1a549e1cf0dc6cf77441e1b07f3fff32001d3a25f78c4ef8fd4ace10642a41cfefc60f';
 hmac_sha512(seed);
 
-// Success. 
+// Success. Now putting it all together. Test vectors from same website.
+// version:     0488ade4     # puts "xprv" or "xpub" at the start after encoding to base58
+// depth:       00           # how deep we are in the key tree
+// index:       00000000     # the index number
+// fingerprint: 00000000     # this is from the hash of the parent key
+// chain code:  a5877bb24b78d82af212fae3474dafe275383c8ad6929d1e41b0058d89129aba
+// key:         001a0000814dafc5a3695629bf458c3d2f90f0e995d1bb5dbb7c1dd6c50fdde720 # prepend 00 for private keys
+//
+// from their ruby code:
+// serialized = version + depth + fingerprint + childnumber + chain_code + key
+// extended_private_key = base58_encode(serialized + checksum(serialized))
+// 
+// serialized: 0488ade4000000000000000000a5877bb24b78d82af212fae3474dafe275383c8ad6929d1e41b0058d89129aba001a0000814dafc5a3695629bf458c3d2f90f0e995d1bb5dbb7c1dd6c50fdde720
+// base58 encoded with checksum:
+// xprv9s21ZrQH143K3hwbAy5RxkLkJv3SFYrE41zDnjftuadT4KGX9WTXPiwP67CsKJn2yDsyu96DxkWEfCn3fCUbjqhSa7Pi55yUd4xWDxurbdc
 
 async function hmac_sha512(data){
 	// Encode the key.
