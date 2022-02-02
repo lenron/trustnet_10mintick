@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+
+<body>
+
+<script src="wordlist_english.js"></script>
+<script src="crypto.js"></script>
+<script>
+console.log(wordListArray[0])
+
+// I found some code and direction which looks promising at
+// https://learnmeabitcoin.com/technical/extended-keys#serialization
+// the xprv prefix is the same as on ian's generator.
+
+// Let's see if we can compute the same checksum that is computed here
+// https://learnmeabitcoin.com/technical/checksum
+
+input = '0488ade4000000000000000000a5877bb24b78d82af212fae3474dafe275383c8ad6929d1e41b0058d89129aba001a0000814dafc5a3695629bf458c3d2f90f0e995d1bb5dbb7c1dd6c50fdde720';
+expected = 'dc7a3ddb';
+computeChecksum(input);
+async function computeChecksum(input) {
+	
+}
+
+
+</script>
+
+</body>
+
+</html>
