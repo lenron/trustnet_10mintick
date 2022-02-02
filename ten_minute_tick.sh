@@ -5,11 +5,11 @@ echo "Starting 10 minute tick script."
 
 while [ true ]
 do
-	#FILES="../ttesting/*.txt"	# Search main directory for html files
-	for f in ../ttesting/*.txt				# Loop through the files
+	# Search main directory for html files
+	for f in ../trustnet/*.html		# Loop through the files
 	do
 		if [ -f "${f##*/}" ]			# If the file exsists in this dir
-		then					# Check for difference
+		then						# Check for difference
 			echo "file found! Is it different?"
 			DIFF=$(diff $f ${f##*/})
 			if [ "$DIFF" != "" ]				
@@ -30,5 +30,5 @@ do
 		fi
 	done
 	echo ""
-	sleep 3s		#10m
+	sleep 10m		#10m
 done
