@@ -40,7 +40,7 @@ hmac_sha512(seed);
 // Success. Now putting it all together. Test vectors from same website.
 // version:     0488ade4     # puts "xprv" or "xpub" at the start after encoding to base58
 // depth:       00           # how deep we are in the key tree
-// index:       00000000     # the index number
+// index:       00000000     # childnumber
 // fingerprint: 00000000     # this is from the hash of the parent key
 // chain code:  a5877bb24b78d82af212fae3474dafe275383c8ad6929d1e41b0058d89129aba
 // key:         001a0000814dafc5a3695629bf458c3d2f90f0e995d1bb5dbb7c1dd6c50fdde720 # prepend 00 for private keys
@@ -52,6 +52,26 @@ hmac_sha512(seed);
 // serialized: 0488ade4000000000000000000a5877bb24b78d82af212fae3474dafe275383c8ad6929d1e41b0058d89129aba001a0000814dafc5a3695629bf458c3d2f90f0e995d1bb5dbb7c1dd6c50fdde720
 // base58 encoded with checksum:
 // xprv9s21ZrQH143K3hwbAy5RxkLkJv3SFYrE41zDnjftuadT4KGX9WTXPiwP67CsKJn2yDsyu96DxkWEfCn3fCUbjqhSa7Pi55yUd4xWDxurbdc
+
+chain_code = 'a5877bb24b78d82af212fae3474dafe275383c8ad6929d1e41b0058d89129aba';
+private_key = '1a0000814dafc5a3695629bf458c3d2f90f0e995d1bb5dbb7c1dd6c50fdde720';
+compute_xprv_key(chain_code, private_key);
+
+async function compute_xprv_key(chain, key){
+	// Prepend 00 for private keys
+	priv_key = '00' + key;
+
+	// Start the base58 encoded key with 'xprv'
+	version = '0488ade4';
+
+	// For Master root extended private key, we start at 0 for several values.
+	depth = '00';
+	index = '00000000';
+	fingerprint = '00000000';
+
+	serialized = version + depth + fingerprint + index
+
+}
 
 async function hmac_sha512(data){
 	// Encode the key.
