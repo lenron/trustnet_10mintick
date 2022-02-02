@@ -9,7 +9,7 @@ testDoubleSha256();
 async function testDoubleSha256() {
 
 	// Hard code for testing
-	const payload_and_prefix = "0488ade4969dd291ec4af4df61193c2b5ff3f3f5e1c46fe2564f6e286d5c45020e1b1783";
+	const payload_and_prefix = "0488ade4969dd291ec4af4df61193c2b5ff3f3f5e1c46fe2564f6e286d5c45020e1b1783f10b11bbb8d0e9422fb0adb90ffa16f0b6d01aa765ec3734a0cc4ce3c5291861";
 
 	// convert to hex str array
 	const pay_and_pre_hex_str_array = new Array;
@@ -60,7 +60,7 @@ function convert_to_base58(num){
     return sb.split('').reverse().join('');
 }
 
-convert = '0488ade4969dd291ec4af4df61193c2b5ff3f3f5e1c46fe2564f6e286d5c45020e1b1783d291a598';
+convert = '0488ade4969dd291ec4af4df61193c2b5ff3f3f5e1c46fe2564f6e286d5c45020e1b1783f10b11bbb8d0e9422fb0adb90ffa16f0b6d01aa765ec3734a0cc4ce3c529186171b4e223';
 console.log('xprv: ' + convert_to_base58(Number('0x' + convert)));
 
 /*
