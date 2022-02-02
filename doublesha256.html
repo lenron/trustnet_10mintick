@@ -2,16 +2,12 @@
 <html>
 <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
 <meta content="utf-8" http-equiv="encoding">
-
 <body>
-
-<script src="wordlist_english.js"></script>
-<script src="crypto.js"></script>
 <script>
-console.log(wordListArray[0])
 
 testDoubleSha256();
 async function testDoubleSha256() {
+/*
 	// Hard code for testing
 	const payload_and_prefix = "0488ade4969dd291ec4af4df61193c2b5ff3f3f5e1c46fe2564f6e286d5c45020e1b1783";
 
@@ -20,6 +16,7 @@ async function testDoubleSha256() {
 	for(var i=0; i <payload_and_prefix.length; i+=2){
 		// I think this might be where the error is.
 		pay_and_pre_hex_str_array.push(payload_and_prefix.substring(i, i+2));
+		//console.log(
 	}
 	console.log('hex string array: ' + pay_and_pre_hex_str_array);
 
@@ -31,7 +28,7 @@ async function testDoubleSha256() {
 
 	const pay_and_pre_uint8 = new Uint8Array(pay_and_pre_bytes_arr);
 	console.log('pay_and_pre_uint8: ' + pay_and_pre_uint8);
-
+*/
 	// Still getting the error with this input somehow!
 	var entropy = new Uint8Array(16);
 	crypto.getRandomValues(entropy)
@@ -55,7 +52,5 @@ async function testDoubleSha256() {
 	console.log('buffer: ' + buffer);
 */
 </script>
-
 </body>
-
 </html>
