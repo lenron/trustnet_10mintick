@@ -52,9 +52,17 @@ hmac_sha512(seed);
 // serialized: 0488ade4000000000000000000a5877bb24b78d82af212fae3474dafe275383c8ad6929d1e41b0058d89129aba001a0000814dafc5a3695629bf458c3d2f90f0e995d1bb5dbb7c1dd6c50fdde720
 // base58 encoded with checksum:
 // xprv9s21ZrQH143K3hwbAy5RxkLkJv3SFYrE41zDnjftuadT4KGX9WTXPiwP67CsKJn2yDsyu96DxkWEfCn3fCUbjqhSa7Pi55yUd4xWDxurbdc
-
+/*
 chain_code = 'a5877bb24b78d82af212fae3474dafe275383c8ad6929d1e41b0058d89129aba';
 private_key = '1a0000814dafc5a3695629bf458c3d2f90f0e995d1bb5dbb7c1dd6c50fdde720';
+compute_xprv_key(chain_code, private_key);
+*/
+// Works. Check with computed mnemonic values:
+// mnemonic = 'neglect time recycle convince produce tiny blue girl senior sense damage uniform'
+// seed = '969dd291ec4af4df61193c2b5ff3f3f5e1c46fe2564f6e286d5c45020e1b1783f10b11bbb8d0e9422fb0adb90ffa16f0b6d01aa765ec3734a0cc4ce3c5291861'
+//
+chain_code = 'f10b11bbb8d0e9422fb0adb90ffa16f0b6d01aa765ec3734a0cc4ce3c5291861';
+private_key= '969dd291ec4af4df61193c2b5ff3f3f5e1c46fe2564f6e286d5c45020e1b1783';
 compute_xprv_key(chain_code, private_key);
 
 async function compute_xprv_key(chain, key){
@@ -71,8 +79,9 @@ async function compute_xprv_key(chain, key){
 
 	serialized = version + depth + fingerprint + index + chain + priv_key;
 	console.log('serialized: ' + serialized);
-	checksum = await computeChecksum(serialized);
-	console.log('checksum: ' + checksum.substring(0,8));
+	checksum_long = await computeChecksum(serialized);
+	checksum = checksum_long.substring(0,8);
+	console.log('checksum: ' + checksum);
 	extended_private_key = convert_to_base58(serialized + checksum);
 	console.log('xprv: ' + extended_private_key);
 }
