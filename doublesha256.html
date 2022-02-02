@@ -5,17 +5,19 @@
 <body>
 <script>
 
-testDoubleSha256();
-async function testDoubleSha256() {
+input = '0488ade4000000000000000000a5877bb24b78d82af212fae3474dafe275383c8ad6929d1e41b0058d89129aba001a0000814dafc5a3695629bf458c3d2f90f0e995d1bb5dbb7c1dd6c50fdde720';
+testDoubleSha256(input);
+async function testDoubleSha256(payload) {
 
 	// Hard code for testing
-	const payload_and_prefix = "0488ade4969dd291ec4af4df61193c2b5ff3f3f5e1c46fe2564f6e286d5c45020e1b1783f10b11bbb8d0e9422fb0adb90ffa16f0b6d01aa765ec3734a0cc4ce3c5291861";
+	//const payload_and_prefix = "0488ade4969dd291ec4af4df61193c2b5ff3f3f5e1c46fe2564f6e286d5c45020e1b1783f10b11bbb8d0e9422fb0adb90ffa16f0b6d01aa765ec3734a0cc4ce3c5291861";
+	// seed512raw = "969dd291ec4af4df61193c2b5ff3f3f5e1c46fe2564f6e286d5c45020e1b1783f10b11bbb8d0e9422fb0adb90ffa16f0b6d01aa765ec3734a0cc4ce3c5291861";
 
 	// convert to hex str array
 	const pay_and_pre_hex_str_array = new Array;
-	for(var i=0; i <payload_and_prefix.length; i+=2){
+	for(var i=0; i <payload.length; i+=2){
 		// I think this might be where the error is.
-		pay_and_pre_hex_str_array.push(payload_and_prefix.substring(i, i+2));
+		pay_and_pre_hex_str_array.push(payload.substring(i, i+2));
 		//console.log(
 	}
 	console.log('hex string array: ' + pay_and_pre_hex_str_array);
@@ -40,7 +42,7 @@ async function testDoubleSha256() {
     //return hashHex;
     console.log(hashHex);
 
-
+	return hashHex;
 }
 
 const base58 = [
@@ -61,7 +63,7 @@ function convert_to_base58(num){
 }
 
 convert = '0488ade4969dd291ec4af4df61193c2b5ff3f3f5e1c46fe2564f6e286d5c45020e1b1783f10b11bbb8d0e9422fb0adb90ffa16f0b6d01aa765ec3734a0cc4ce3c529186171b4e223';
-console.log('xprv: ' + convert_to_base58(Number('0x' + convert)));
+//console.log('xprv: ' + convert_to_base58(Number('0x' + convert)));
 
 /*
 	const buffer = new Uint8Array(36);
