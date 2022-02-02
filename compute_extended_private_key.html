@@ -25,9 +25,18 @@ computeChecksum(input);
 // taking the first 4 bytes: dc7a3ddb
 // Success! Now we know our computeChecksum function works. Moving on...
 // 
+// Next step, figure out what exactly is going on in the HMAC function.
+// In section 1, also at https://learnmeabitcoin.com/technical/extended-keys#serialization
+// Like the salt for PBKDF2, HMAC-SHA512 wants a key. In bitcoin's case: 'Bitcoin seed'
+// I found a subtlecrypto implementation here 
+// https://stackoverflow.com/questions/47329132/how-to-get-hmac-with-crypto-web-api
+
+async function hmac-sha512(data){
+	const key = 'Bitcoin seed';
+	const key_enc = new TextEncoder().encode(key);
 
 
-
+}
 
 async function computeChecksum(payload) {
 
