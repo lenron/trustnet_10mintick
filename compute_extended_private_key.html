@@ -32,8 +32,13 @@ computeChecksum(input);
 // https://stackoverflow.com/questions/47329132/how-to-get-hmac-with-crypto-web-api
 
 // Try data computed at the same learnme serialization site:
+// private key: 1a0000814dafc5a3695629bf458c3d2f90f0e995d1bb5dbb7c1dd6c50fdde720
+// chain code:  a5877bb24b78d82af212fae3474dafe275383c8ad6929d1e41b0058d89129aba
 seed = '571ae597480e9fa150f8d972b6ca27ad9f456bc9c98e41f5d2d15a136f1a549e1cf0dc6cf77441e1b07f3fff32001d3a25f78c4ef8fd4ace10642a41cfefc60f';
 hmac_sha512(seed);
+
+// Success. 
+
 async function hmac_sha512(data){
 	// Encode the key.
 	const key = 'Bitcoin seed';
@@ -42,7 +47,7 @@ async function hmac_sha512(data){
 	// Encode the hex data
 	const data_encoded = hex_string_to_ArrayBuffer(data);
 
-	const imported_key = window.crypto.subtle.importKey(
+	const imported_key = await crypto.subtle.importKey(
 	    "raw", // raw format of the key - should be Uint8Array
 		key_enc, 
 		{ // algorithm details
@@ -53,7 +58,7 @@ async function hmac_sha512(data){
 		["sign"] // what this key can do
 	);
 
-	const signature = await window.crypto.subtle.sign(
+	const signature = await crypto.subtle.sign(
         "HMAC",
         imported_key,
         data_encoded
