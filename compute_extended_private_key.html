@@ -31,6 +31,9 @@ computeChecksum(input);
 // I found a subtlecrypto implementation here 
 // https://stackoverflow.com/questions/47329132/how-to-get-hmac-with-crypto-web-api
 
+// Try data computed at the same learnme serialization site:
+seed = '571ae597480e9fa150f8d972b6ca27ad9f456bc9c98e41f5d2d15a136f1a549e1cf0dc6cf77441e1b07f3fff32001d3a25f78c4ef8fd4ace10642a41cfefc60f';
+hmac_sha512(seed);
 async function hmac_sha512(data){
 	// Encode the key.
 	const key = 'Bitcoin seed';
@@ -47,14 +50,14 @@ async function hmac_sha512(data){
 			hash: {name: "SHA-512"}
 		},
 		false, // export = false
-		["sign", "verify"] // what this key can do
-	)
+		["sign"] // what this key can do
+	);
 
 	const signature = await window.crypto.subtle.sign(
         "HMAC",
         imported_key,
         data_encoded
-    )
+    );
 	console.log('signature: ' + buf2hex(signature));
 }
 
