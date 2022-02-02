@@ -31,11 +31,22 @@ computeChecksum(input);
 // I found a subtlecrypto implementation here 
 // https://stackoverflow.com/questions/47329132/how-to-get-hmac-with-crypto-web-api
 
-async function hmac-sha512(data){
+async function hmac_sha512(data){
 	const key = 'Bitcoin seed';
 	const key_enc = new TextEncoder().encode(key);
 
+	const imported_key = window.crypto.subtle.importKey(
+	    "raw", // raw format of the key - should be Uint8Array
+		key_enc, 
+		{ // algorithm details
+			name: "HMAC",
+			hash: {name: "SHA-512"}
+		},
+		false, // export = false
+		["sign", "verify"] // what this key can do
+	)
 
+	
 }
 
 async function computeChecksum(payload) {
