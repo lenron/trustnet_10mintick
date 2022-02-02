@@ -32,8 +32,12 @@ computeChecksum(input);
 // https://stackoverflow.com/questions/47329132/how-to-get-hmac-with-crypto-web-api
 
 async function hmac_sha512(data){
+	// Encode the key.
 	const key = 'Bitcoin seed';
 	const key_enc = new TextEncoder().encode(key);
+
+	// Encode the hex data
+	const data_encoded = hex_string_to_ArrayBuffer(data);
 
 	const imported_key = window.crypto.subtle.importKey(
 	    "raw", // raw format of the key - should be Uint8Array
@@ -46,42 +50,50 @@ async function hmac_sha512(data){
 		["sign", "verify"] // what this key can do
 	)
 
-	
+	const signature = await window.crypto.subtle.sign(
+        "HMAC",
+        imported_key,
+        data_encoded
+    )
+	console.log('signature: ' + buf2hex(signature));
 }
 
 async function computeChecksum(payload) {
 
-	// Code from previous draft
+	// Encode payload data into ArrayBuffer.
+	const hexArrayBuffer = hex_string_to_ArrayBuffer(payload);
 
-    // convert to hex str array
-    const pay_and_pre_hex_str_array = new Array;
-    for(var i=0; i <payload.length; i+=2){
-        // I think this might be where the error is.
-        pay_and_pre_hex_str_array.push(payload.substring(i, i+2));
-        //console.log(
-    }
-    console.log('hex string array: ' + pay_and_pre_hex_str_array);
-
-    const pay_and_pre_bytes_arr = new Array;
-    for(var i=0; i < pay_and_pre_hex_str_array.length; i++){
-        pay_and_pre_bytes_arr.push(parseInt(pay_and_pre_hex_str_array[i], 16));
-    }
-    console.log('number array: ' + pay_and_pre_bytes_arr);
-
-    const pay_and_pre_uint8 = new Uint8Array(pay_and_pre_bytes_arr);
-    console.log('pay_and_pre_uint8: ' + pay_and_pre_uint8);
-
-    // Still getting the error with this input somehow!
-    //var entropy = new Uint8Array(16);
-    //crypto.getRandomValues(entropy);
-
-    const hashBuffer256 = await crypto.subtle.digest('SHA-256', pay_and_pre_uint8);
+    const hashBuffer256 = await crypto.subtle.digest('SHA-256', hexArrayBuffer);
     const double256 = await crypto.subtle.digest('SHA-256', hashBuffer256);
     const hashArray = Array.from(new Uint8Array(double256));
     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
     console.log(hashHex);
     return hashHex;	
+}
+
+// This function could probably be condensed one more line.
+function hex_string_to_ArrayBuffer(hexString){
+
+    // convert to hex str array
+    const hexStringArray = new Array;
+    for(var i=0; i < hexString.length; i+=2){
+        // I think this might be where the error is.
+        hexStringArray.push(hexString.substring(i, i+2));
+        //console.log(
+    }
+    //console.log('hex string array: ' + hexStringArray);
+
+    const hexBytesArray = new Array;
+    for(var i=0; i < hexStringArray.length; i++){
+        hexBytesArray.push(parseInt(hexStringArray[i], 16));
+    }
+    //console.log('number array: ' + hexBytesArray);
+
+    const hexArrayBuffer = new Uint8Array(hexBytesArray);
+    //console.log('pay_and_pre_uint8: ' + hexArrayBuffer);
+
+	return hexArrayBuffer;
 }
 
 
