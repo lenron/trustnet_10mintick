@@ -11,7 +11,8 @@ console.log(wordListArray[1])
 
 run_async();
 async function run_async (){
-	const computed_values = mnemonic_gen_to_xprv();
+	var computed_values = new Array();
+	computed_values = await mnemonic_gen_to_xprv();
 	console.log('mnemonic sentence: ' + computed_values[0]);
 	console.log('512 bit seed: ' + computed_values[1]);
 	console.log('root extended private key: ' + computed_values[2]);
@@ -33,16 +34,16 @@ async function mnemonic_gen_to_xprv (){
 	hmac_sha512_hashed_seed = await hmac_sha512(seed512_hex);
 	private_key_256 = hmac_sha512_hashed_seed.substring(0,64);
 	chain_code = hmac_sha512_hashed_seed.substring(64,128);
-	console.log('hashed seed: ' + hmac_sha512_hashed_seed);
-	console.log('private key: ' + private_key_256);
-	console.log('chain code: ' + chain_code);
+	//console.log('hashed seed: ' + hmac_sha512_hashed_seed);
+	//console.log('private key: ' + private_key_256);
+	//console.log('chain code: ' + chain_code);
 
-	xprv_key = compute_xprv_key(chain_code, private_key_256);
+	xprv_key = await compute_xprv_key(chain_code, private_key_256);
 
-	var return_arr = [];
-	return_arr.push(mne_sentence);
-	return_arr.push(seed512_hex);
-	return_arr.push(xprv_key);
+	var return_arr = new Array();
+	return_arr[0] = mne_sentence;
+	return_arr[1] = seed512_hex;
+	return_arr[2] = xprv_key;
 
 	return return_arr;
 }
@@ -151,7 +152,6 @@ async function computeChecksum(payload) {
     const hashArray = Array.from(new Uint8Array(double256));
     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
-    console.log(hashHex);
     return hashHex;	
 }
 
@@ -248,7 +248,6 @@ async function computeSeed512(mnemonicPhrase, in_password){
         password = '';
     }
     const salt = 'mnemonic' + password;
-    console.log(salt);
     const normsalt = salt.normalize('NFKD', 'utf8');
     // For PBKDF2 to work properly, inputs must be in uint8 ArrayBuffer format.
     const saltArrayBuffer = new TextEncoder().encode(normsalt);
