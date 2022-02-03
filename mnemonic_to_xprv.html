@@ -30,8 +30,13 @@ async function mnemonic_gen_to_xprv (){
 	}
 
 	seed512_hex = computeSeed512(mne_sentence);
+	hmac_sha512_hashed_seed = hmac_sha512(seed512_hex);
 
-	const return_arr = [];
+	var return_arr = [];
+	return_arr.push(mne_sentence);
+	return_arr.push(seed512_hex);
+	return_arr.push(xprv_key);
+
 	return return_arr;
 }
 
@@ -52,12 +57,13 @@ async function compute_xprv_key(chain, key){
 	const fingerprint = '00000000';
 
 	const serialized = version + depth + fingerprint + index + chain + priv_key;
-	console.log('serialized: ' + serialized);
+	//console.log('serialized: ' + serialized);
 	const checksum_long = await computeChecksum(serialized);
 	const checksum = checksum_long.substring(0,8);
-	console.log('checksum: ' + checksum);
+	//console.log('checksum: ' + checksum);
 	var extended_private_key = encode_b58(serialized + checksum);
-	console.log('the xprv: ' + extended_private_key);
+	//console.log('the xprv: ' + extended_private_key);
+	return extended_private_key;
 }
 
 function encode_b58(hex_number) {
