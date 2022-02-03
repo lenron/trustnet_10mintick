@@ -35,6 +35,7 @@ function encode_b58(hex_number) {
 	// Convert hex string into a number for processing.
 	// Default numbers in java are computed to only 16 significant digits.
 	var num = BigInt(Number.MAX_SAFE_INTEGER);
+	// 0x tells BigInt that the hex_number is in hexadecimal
 	input = '0x' + hex_number;
 	num = BigInt(input);
 
