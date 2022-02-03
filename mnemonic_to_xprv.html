@@ -29,8 +29,15 @@ async function mnemonic_gen_to_xprv (){
 		console.log('mnemonic sentence INVALID!');
 	}
 
-	seed512_hex = computeSeed512(mne_sentence);
-	hmac_sha512_hashed_seed = hmac_sha512(seed512_hex);
+	seed512_hex = await computeSeed512(mne_sentence);
+	hmac_sha512_hashed_seed = await hmac_sha512(seed512_hex);
+	private_key_256 = hmac_sha512_hashed_seed.substring(0,64);
+	chain_code = hmac_sha512_hashed_seed.substring(64,128);
+	console.log('hashed seed: ' + hmac_sha512_hashed_seed);
+	console.log('private key: ' + private_key_256);
+	console.log('chain code: ' + chain_code);
+
+	xprv_key = compute_xprv_key(chain_code, private_key_256);
 
 	var return_arr = [];
 	return_arr.push(mne_sentence);
@@ -43,8 +50,8 @@ async function mnemonic_gen_to_xprv (){
 // Takes hex strings as input.
 // Outputs the xprv key encoded in base58.
 async function compute_xprv_key(chain, key){
-	console.log('chain: ' + chain);
-	console.log('key: ' + key);
+	//console.log('chain: ' + chain);
+	//console.log('key: ' + key);
 	// Prepend 00 for private keys
 	const priv_key = '00' + key;
 
