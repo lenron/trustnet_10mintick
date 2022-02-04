@@ -13,20 +13,25 @@ console.log(wordListArray[1])
 test_keygen();
 async function test_keygen(){
 
-
-}
-
-
-
-async function derive_hardened_child_private_key() {
-	// generate random root xprv key
-	
-
+	// Generate a key we know is valid
+	const sentence = await computeMnemonicPhrase();
+	const seed = await computeSeed512(sentence);
+	const hashed_seed = await hmac_sha512(seed);
+	private_key = hashed_seed.substring(0,64);
+	chain_code = hashed_seed.substring(64,128);
 
 
 }
 
-async function compute_master_and_chain
+
+
+async function derive_hardened_child_private_key(parent_chain_code, parent_private_key) {
+	// 
+
+
+
+}
+
 
 // Takes no inputs
 // Returns array containing mnemonic sentence, seed, xprv respectively
