@@ -6,25 +6,60 @@
 <body>
 
 <script src="wordlist_english.js"></script>
-<script src="crypto.js"></script>
 <script>
 // Ability check
 console.log(wordListArray[1])
 
-testPhrase();
-async function testPhrase() {
-	// Get string a string of the mnemonic sentence.
-	const phrase = await computeMnemonicPhrase();
-	console.log('Mnemonic Phrase: ' + phrase);
-	if(verifyMnemonicPhrase(phrase)){
-		console.log('Mnemonic phrase verified!');
-	}else{
-		console.log('Verification of mnemonic phrase failed!');
-	}
-	const seed = await computeSeed512(phrase);
-	console.log('computed 512 bit seed in hex: ' + seed);
+test_keygen();
+async function test_keygen(){
+
+
 }
 
+
+
+async function derive_hardened_child_private_key() {
+
+
+
+}
+
+// Takes hex string(s) as input and outputs a hex string.
+// Performs the HMAC-SHA512 hash.
+async function hmac_sha512(data, key){
+    // If no key is given, we are computing the root extended private key
+    if (typeof key == 'undefined'){
+        // Encode the key.
+        const key = 'Bitcoin seed';
+        var key_enc = new TextEncoder().encode(key);
+    }else{
+        // Any other input should be a hex string.
+        var key_enc = hex_string_to_ArrayBuffer(key);
+    }
+
+    // Encode the hex data
+    const data_encoded = hex_string_to_ArrayBuffer(data);
+
+    //CryptoKey object needed for deriveBits() to perform PBKDF2.
+    const imported_key = await crypto.subtle.importKey(
+        "raw", // raw format of the key - should be Uint8Array
+        key_enc,
+        { // algorithm details
+            name: "HMAC",
+            hash: {name: "SHA-512"}
+        },
+        false, // export = false
+        ["sign"] // what this key can do
+    );
+
+    // Perform the HMAC-SHA512 hash
+    const signature = await crypto.subtle.sign(
+        "HMAC",
+        imported_key,
+        data_encoded
+    );
+    return buf2hex(signature);
+}
 
 </script>
 
