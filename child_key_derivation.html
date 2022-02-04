@@ -26,6 +26,38 @@ async function derive_hardened_child_private_key() {
 
 }
 
+async function compute_master_and_chain
+
+// Takes no inputs
+// Returns array containing mnemonic sentence, seed, xprv respectively
+async function mnemonic_gen_to_xprv (){
+
+    const mne_sentence = await computeMnemonicPhrase();
+
+    if( verifyMnemonicPhrase(mne_sentence)){
+        console.log('mnemonic sentence verified!');
+    }else{
+        console.log('mnemonic sentence INVALID!');
+    }
+
+    seed512_hex = await computeSeed512(mne_sentence);
+    hmac_sha512_hashed_seed = await hmac_sha512(seed512_hex);
+    private_key_256 = hmac_sha512_hashed_seed.substring(0,64);
+    chain_code = hmac_sha512_hashed_seed.substring(64,128);
+    //console.log('hashed seed: ' + hmac_sha512_hashed_seed);
+    //console.log('private key: ' + private_key_256);
+    //console.log('chain code: ' + chain_code);
+
+    xprv_key = await compute_xprv_key(chain_code, private_key_256);
+
+    var return_arr = new Array();
+    return_arr[0] = mne_sentence;
+    return_arr[1] = seed512_hex;
+    return_arr[2] = xprv_key;
+
+    return return_arr;
+}
+
 // I can't think of a reason we would need to extract the entropy bits from the mnemonic phrase.
 // Besides verification. Returns true if verified, false otherwise.
 async function verifyMnemonicPhrase(phrase){
