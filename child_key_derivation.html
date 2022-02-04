@@ -17,15 +17,16 @@ async function test_keygen(){
 	const sentence = await computeMnemonicPhrase();
 	const seed = await computeSeed512(sentence);
 	const hashed_seed = await hmac_sha512(seed);
-	private_key = hashed_seed.substring(0,64);
-	chain_code = hashed_seed.substring(64,128);
+	const private_key = hashed_seed.substring(0,64);
+	const chain_code = hashed_seed.substring(64,128);
+	const results_array = derive_hardened_child_private_key_and_chain_code(chain_code, private_key);
 
 
 }
 
 
 
-async function derive_hardened_child_private_key(parent_chain_code, parent_private_key) {
+async function derive_hardened_child_private_key_and_chain_code(parent_chain_code, parent_private_key) {
 	// 
 
 
