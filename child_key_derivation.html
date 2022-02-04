@@ -5,7 +5,7 @@
 
 <body>
 
-<script src="wordlist_english.js"></script>
+<script src="js_include_files/wordlist_english.js"></script>
 <script>
 // Ability check
 console.log(wordListArray[1])
@@ -24,11 +24,18 @@ async function test_keygen(){
 
 }
 
-
-
+// Takes parent private key and chain code and computes child key and chain code.
+// All inputs and outputs are hex strings.
 async function derive_hardened_child_private_key_and_chain_code(parent_chain_code, parent_private_key) {
-	// 
+	// index of hardened keys must be between 2^31 and 2^32 - 1
+	// starts at m/2147483648
+	const index = 2147483648;
+	// index must be in hex string for concatenation
+	index_hex = index.toString(16).padStart(2, '0');
+	console.log('index_hex: ' + index_hex);
 
+	// set up HMAC hash
+	const data = '00' + parent_private_key + index;
 
 
 }
