@@ -41,6 +41,10 @@ async function derive_hardened_child_private_key_and_chain_code(parent_chain_cod
 	index_hex = index.toString(16).padStart(2, '0');
 	console.log('index_hex: ' + index_hex);
 
+	// use test values from learnme to make sure we're doing this right.
+	parent_chain_code = '463223aac10fb13f291a1bc76bc26003d98da661cb76df61e750c139826dea8b';
+	parent_private_key = 'f79bb0d317b310b261a55a8ab393b4c8a1aba6fa4d08aef379caba502d5d67f9';
+
 	// set up HMAC hash 
 	const data = '00' + parent_private_key + index_hex;
 	const key = parent_chain_code;
@@ -59,8 +63,15 @@ async function derive_hardened_child_private_key_and_chain_code(parent_chain_cod
 
 	// Use scalar addition here
 	var child_private_key_int = BigInt(Number.MAX_SAFE_INTEGER);
+	child_private_key_int = (BigInt('0x' + ikey_left) + BigInt('0x' + parent_private_key)) % n_order_int;
+	child_private_key_hex = num2hex(child_private_key_int);
+	console.log('computed private key: ' + child_private_key_hex);
 	
 
+}
+
+function num2hex(integer){
+	return integer.toString(16).padStart(2, '0')
 }
 
 
