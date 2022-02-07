@@ -33,8 +33,9 @@ async function derive_hardened_child_private_key_and_chain_code(parent_chain_cod
 	const index = 2147483648;
 
 	// The order of the elliptic curve defined in secp256k1 is a constant.
-	// To do any number processing in native javascript, we have to use a bigInt.
 	const n_order_hex = 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141';
+	// To do any number processing in native javascript, we have to use a BigInt.
+	var n_order_int = BigInt('0x' + n_order_hex);
 
 	// index must be in hex string for concatenation
 	index_hex = index.toString(16).padStart(2, '0');
@@ -46,8 +47,16 @@ async function derive_hardened_child_private_key_and_chain_code(parent_chain_cod
 
 	const intermediate_key = await hmac_sha512(data, key);
 	console.log('intermediate_key: ' + intermediate_key);
-	// test results on monday!
+	const ikey_left = intermediate_key.substring(0,64);
+    const child_chain_code = intermediate_key.substring(64,128);
 
+	// Check if chain code is valid.
+	// I'm not sure why this check is important. I suspect there is a math reason.
+	if (BigInt('0x' + child_chain_code) >= n_order_int){
+		throw 'Chain code is greater than the order of the curve. Try the next index.';
+	}
+
+	
 
 }
 
