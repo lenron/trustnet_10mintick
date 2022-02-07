@@ -29,7 +29,13 @@ async function test_keygen(){
 async function derive_hardened_child_private_key_and_chain_code(parent_chain_code, parent_private_key) {
 	// index of hardened keys must be between 2^31 and 2^32 - 1
 	// starts at m/2147483648
+	// I think this will have to be computed 
 	const index = 2147483648;
+
+	// The order of the elliptic curve defined in secp256k1 is a constant.
+	// To do any number processing in native javascript, we have to use a bigInt.
+	const n_order_hex = 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141';
+
 	// index must be in hex string for concatenation
 	index_hex = index.toString(16).padStart(2, '0');
 	console.log('index_hex: ' + index_hex);
