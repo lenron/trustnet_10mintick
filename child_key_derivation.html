@@ -56,7 +56,7 @@ async function derive_hardened_child_private_key_and_chain_code(parent_chain_cod
 
 	// Check if chain code is valid.
 	// I'm not sure why this check is important. I suspect there is a math reason.
-	// Warning text from learnmeabitcoin ruby code.
+	// Error text from learnmeabitcoin ruby code.
 	if (BigInt('0x' + child_chain_code) >= n_order_int){
 		throw 'Chain code is greater than the order of the curve. Try the next index.';
 	}
