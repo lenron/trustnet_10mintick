@@ -54,8 +54,11 @@ async function derive_hardened_child_private_key_and_chain_code(parent_chain_cod
 	// I'm not sure why this check is important. I suspect there is a math reason.
 	if (BigInt('0x' + child_chain_code) >= n_order_int){
 		throw 'Chain code is greater than the order of the curve. Try the next index.';
+	}else{
+		console.log('chain code not too large.');
 	}
 
+	// Use scalar addition here
 	
 
 }
