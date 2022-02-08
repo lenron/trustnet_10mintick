@@ -21,6 +21,9 @@ async function test_keygen(){
 	const hashed_seed = await hmac_sha512(seed);
 	const private_key = hashed_seed.substring(0,64);
 	const chain_code = hashed_seed.substring(64,128);
+	const root_private_key = await compute_extended_key(chain_code, '00' + private_key);
+	console.log('root extended private key: ' + root_private_key);
+
 	// use test values from learnme to make sure we're doing this right.
 	//parent_chain_code = '463223aac10fb13f291a1bc76bc26003d98da661cb76df61e750c139826dea8b';
 	//parent_key = 'f79bb0d317b310b261a55a8ab393b4c8a1aba6fa4d08aef379caba502d5d67f9';
@@ -94,22 +97,20 @@ function num2hex(integer){
 
 // Takes hex strings as input.
 // Outputs the xprv key encoded in base58.
-async function compute_extended_key(chain, key, depth, index, fingerprint){
+// For Master root extended private key, we start at 0 for several values.
+async function compute_extended_key(chain, key, depth = '00', index = '00000000', fingerprint = '00000000'){
+	var version = '';
 	// Check if key is private
-	if( key.substring(0,2) === '00'){
+	if( key.substring(0,2) == '00'){
 		// key is private, starte encoded str with xprv
-    	const version = '0488ADE4';
+    	version = '0488ADE4';
 	}else{	// key is public, start encoded str with xpub
-    	const version = '0488B21E';
+    	version = '0488B21E';
 	}
 
-    // For Master root extended private key, we start at 0 for several values.
-    depth = '00';
-    index = '00000000';
-    fingerprint = '00000000';
 
     const serialized = version + depth + fingerprint + index + chain + key;
-    //console.log('serialized: ' + serialized);
+    console.log('serialized: ' + serialized);
     const checksum_long = await computeChecksum(serialized);
     const checksum = checksum_long.substring(0,8);
     //console.log('checksum: ' + checksum);
