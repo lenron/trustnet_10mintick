@@ -15,11 +15,18 @@ async function test_keygen(){
 
 	// Generate a key we know is valid
 	const sentence = await computeMnemonicPhrase();
+	console.log('mnemonic sentence: ' + sentence);
 	const seed = await computeSeed512(sentence);
+	console.log('seed: ' + seed);
 	const hashed_seed = await hmac_sha512(seed);
 	const private_key = hashed_seed.substring(0,64);
 	const chain_code = hashed_seed.substring(64,128);
-	const results_array = await derive_child_key(chain_code, private_key);
+	// use test values from learnme to make sure we're doing this right.
+	//parent_chain_code = '463223aac10fb13f291a1bc76bc26003d98da661cb76df61e750c139826dea8b';
+	//parent_key = 'f79bb0d317b310b261a55a8ab393b4c8a1aba6fa4d08aef379caba502d5d67f9';
+
+	// use index 2^31 or greater to derive hardened child.
+	const results_array = await derive_child_key(chain_code, private_key, 2**31);
 	console.log('computed child key: ' + results_array[0]);
 	console.log('computed chain code: ' + results_array[1]);
 
@@ -43,7 +50,7 @@ async function derive_child_key(parent_chain_code, parent_key, index) {
 	var n_order_int = BigInt('0x' + n_order_hex);
 
 	// index must be in hex string for concatenation
-	index_hex = num2hex(n_order_int);
+	index_hex = num2hex(index);
 	console.log('index_hex: ' + index_hex);
 
 	// use test values from learnme to make sure we're doing this right.
