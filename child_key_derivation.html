@@ -38,7 +38,7 @@ async function derive_hardened_child_private_key_and_chain_code(parent_chain_cod
 	var n_order_int = BigInt('0x' + n_order_hex);
 
 	// index must be in hex string for concatenation
-	index_hex = index.toString(16).padStart(2, '0');
+	index_hex = num2hex(n_order_int);
 	console.log('index_hex: ' + index_hex);
 
 	// use test values from learnme to make sure we're doing this right.
