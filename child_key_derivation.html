@@ -19,18 +19,21 @@ async function test_keygen(){
 	const hashed_seed = await hmac_sha512(seed);
 	const private_key = hashed_seed.substring(0,64);
 	const chain_code = hashed_seed.substring(64,128);
-	const results_array = derive_hardened_child_private_key_and_chain_code(chain_code, private_key);
+	const results_array = derive_child_key(chain_code, private_key);
 
 
 }
 
 // Takes parent private key and chain code and computes child key and chain code.
-// All inputs and outputs are hex strings.
-async function derive_hardened_child_private_key_and_chain_code(parent_chain_code, parent_private_key) {
+// index input is a number, both parent inputs are hex strings.
+// I'm setting this function up to have the capability to derive public as well as private
+// child keys.  Indexes 2^31 to 2^32-1 will derive hardened children keys (able to derive child
+// private keys). Indexes 0 to 2^31-1 will derive normal children keys.
+async function derive_child_key(parent_chain_code, parent_private_key, index) {
 	// index of hardened keys must be between 2^31 and 2^32 - 1
 	// starts at m/2147483648
 	// I think this will have to be computed 
-	const index = 2147483648;
+	//const index = 2147483648;
 
 	// The order of the elliptic curve defined in secp256k1 is a constant.
 	const n_order_hex = 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141';
@@ -42,8 +45,8 @@ async function derive_hardened_child_private_key_and_chain_code(parent_chain_cod
 	console.log('index_hex: ' + index_hex);
 
 	// use test values from learnme to make sure we're doing this right.
-	parent_chain_code = '463223aac10fb13f291a1bc76bc26003d98da661cb76df61e750c139826dea8b';
-	parent_private_key = 'f79bb0d317b310b261a55a8ab393b4c8a1aba6fa4d08aef379caba502d5d67f9';
+	//parent_chain_code = '463223aac10fb13f291a1bc76bc26003d98da661cb76df61e750c139826dea8b';
+	//parent_private_key = 'f79bb0d317b310b261a55a8ab393b4c8a1aba6fa4d08aef379caba502d5d67f9';
 
 	// set up HMAC hash 
 	const data = '00' + parent_private_key + index_hex;
