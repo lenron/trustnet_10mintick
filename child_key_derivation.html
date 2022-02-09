@@ -16,6 +16,7 @@ var secp = nobleSecp256k1;
 test_keygen();
 async function test_keygen(){
 
+	//var private_key = 'f79bb0d317b310b261a55a8ab393b4c8a1aba6fa4d08aef379caba502d5d67f9';
 	// Generate a key we know is valid
 	const sentence = await computeMnemonicPhrase();
 	console.log('mnemonic sentence: ' + sentence);
@@ -35,16 +36,20 @@ async function test_keygen(){
 	const results_array = await derive_child_key(chain_code, private_key, 2**31);
 	console.log('computed child key: ' + results_array[0]);
 	console.log('computed chain code: ' + results_array[1]);
-	
+
 	// check secp
 	// 'true' option returns a compressed public key.
-	const public_key = secp.getPublicKey(private_key, true);
+	const public_key = await secp.getPublicKey(private_key, true);
 	console.log('public key: ' + public_key);
+
+	const address = getAddress(public_key);
+	console.log('address: ' + address);
 
 
 }
 
-async function getAddress(key){
+async function getAddress(public_key){
+	
 
 }
 
