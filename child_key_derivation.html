@@ -409,7 +409,10 @@ async function computeChecksum(payload) {
     // Bitcoin base58check uses a double sha-256 hash.
     const hashBuffer256 = await crypto.subtle.digest('SHA-256', hexArrayBuffer);
     const double256 = await crypto.subtle.digest('SHA-256', hashBuffer256);
+	console.log('buffer output: ' + new Uint8Array(double256));
+
     hashHex = buf2hex(double256);
+	console.log('buf2hex output: ' + hashHex);
 
     return hashHex.substring(0,8);
     //return checksum;
