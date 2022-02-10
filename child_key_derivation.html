@@ -57,7 +57,7 @@ async function test_keygen(){
 // returns a base58 encoded P2PKH (prefix 1) address.
 async function getAddress(public_key){
 	// run a SHA256 hash on the public key
-	const pubkey_buf = hexStringToArrayBuffer(public_key);
+	const pubkey_buf = hex_string_to_ArrayBuffer(public_key);
     const hashBuffer256 = await crypto.subtle.digest('SHA-256', pubkey_buf);
 	const pubkey_uint8_arr = new Uint8Array(hashBuffer256);
 
@@ -406,11 +406,12 @@ async function computeSeed512(mnemonicPhrase, in_password){
 async function computeChecksum(payload) {
 
     // Encode payload data into ArrayBuffer.
-    const hexArrayBuffer = hexStringToArrayBuffer(payload);
+    const hexArrayBuffer = hex_string_to_ArrayBuffer(payload);
 
     // Bitcoin base58check uses a double sha-256 hash.
     const hashBuffer256 = await crypto.subtle.digest('SHA-256', hexArrayBuffer);
     const double256 = await crypto.subtle.digest('SHA-256', hashBuffer256);
+/*
 	test = new Uint8Array(double256);
 	console.log('buffer output: ' + test);
 	test_hex = new Array;
@@ -418,9 +419,9 @@ async function computeChecksum(payload) {
 		test_hex.push(test[i].toString(16).padStart(2, '0'));
 	}
 	console.log('test_hex: ' + test_hex);
-
+*/
     hashHex = buf2hex(double256);
-	console.log('buf2hex output: ' + hashHex);
+	//console.log('buf2hex output: ' + hashHex);
 
     return hashHex.substring(0,8);
     //return checksum;
@@ -466,11 +467,11 @@ async function hmac_sha512(data, key){
         var key_enc = new TextEncoder().encode(key);
     }else{
         // Any other input should be a hex string.
-        var key_enc = hexStringToArrayBuffer(key);
+        var key_enc = hex_string_to_ArrayBuffer(key);
     }
 
     // Encode the hex data
-    const data_encoded = hexStringToArrayBuffer(data);
+    const data_encoded = hex_string_to_ArrayBuffer(data);
 
     //CryptoKey object needed for deriveBits() to perform PBKDF2.
     const imported_key = await crypto.subtle.importKey(
