@@ -146,6 +146,8 @@ async function derive_child_key(parent_chain_code, parent_key, index) {
 	console.log('intermediate_key: ' + intermediate_key);
 	const ikey_left = intermediate_key.substring(0,64);
     const child_chain_code = intermediate_key.substring(64,128);
+	console.log('ikey left: ' + ikey_left);
+	console.log('chain code: ' + child_chain_code);
 
 	// BIP 32 specifies that derived chain codes >= the order (n) are invalid.
 	if (BigInt('0x' + child_chain_code) >= n_order_int){
@@ -159,7 +161,11 @@ async function derive_child_key(parent_chain_code, parent_key, index) {
 	child_key_hex = num2hex(child_key_int);
 
 	var children_keys = new Array;
-	children_keys[0] = child_key_hex;
+	if (child_key_hex.length != 32){
+		children_keys[0] = '0' + child_key_hex;
+	}else{
+		children_keys[0] = child_key_hex;
+	}
 	children_keys[1] = child_chain_code;
 	
 	return children_keys;
@@ -185,8 +191,6 @@ async function compute_extended_key(chain, key, depth = '00', index = '00000000'
     const serialized = version + depth + fingerprint + index + chain + key;
     console.log('serialized: ' + serialized);
     const checksum = await computeChecksum(serialized);
-	console.log('fixing checksum: ' + checksum);
-	console.log('checksum b58: ' + encode_b58(checksum));
     var extended_key = encode_b58(serialized + checksum);
     //console.log('the xprv: ' + extended_private_key);
     return extended_key;
