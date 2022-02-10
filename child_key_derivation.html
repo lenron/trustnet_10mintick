@@ -146,7 +146,7 @@ async function derive_child_key(parent_chain_code, parent_key, index) {
 	console.log('intermediate_key: ' + intermediate_key);
 	const ikey_left = intermediate_key.substring(0,64);
     const child_chain_code = intermediate_key.substring(64,128);
-	console.log('ikey left: ' + ikey_left);
+	console.log('ikey left:  ' + ikey_left);
 	console.log('chain code: ' + child_chain_code);
 
 	// BIP 32 specifies that derived chain codes >= the order (n) are invalid.
@@ -159,7 +159,6 @@ async function derive_child_key(parent_chain_code, parent_key, index) {
 	var child_key_int = BigInt(Number.MAX_SAFE_INTEGER);
 	child_key_int = (BigInt('0x' + ikey_left) + BigInt('0x' + parent_key)) % n_order_int;
 	child_key_hex = num2hex(child_key_int);
-	var children_keys = new Array;
 /*
 	if (child_key_hex.length != 64){
 		children_keys[0] = '0' + child_key_hex;
@@ -169,6 +168,7 @@ async function derive_child_key(parent_chain_code, parent_key, index) {
 	}
 */
 	
+	let children_keys = new Array;
 	children_keys[0] = child_key_hex;
 	children_keys[1] = child_chain_code;
 	
