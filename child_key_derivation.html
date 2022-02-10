@@ -480,15 +480,23 @@ async function hmac_sha512(data, key){
 
     // Encode the hex data
     const data_encoded = hex_string_to_ArrayBuffer(data);
+	
+	//set up hmac algorithm object
+	hmac_algorithm_obj = 
+	{
+		name: "HMAC",
+		hash: {name: "SHA-512"}
+	}
 
     //CryptoKey object needed for deriveBits() to perform PBKDF2.
     const imported_key = await crypto.subtle.importKey(
         "raw", // raw format of the key - should be Uint8Array
         key_enc,
-        { // algorithm details
+        /*{ // algorithm details
             name: "HMAC",
             hash: {name: "SHA-512"}
-        },
+        },*/
+		hmac_algorithm_obj,
         false, // export = false
         ["sign"] // what this key can do
     );
@@ -499,6 +507,9 @@ async function hmac_sha512(data, key){
         imported_key,
         data_encoded
     );
+	console.log('signature: ' + new Uint8Array(signature));
+	//const result = crypto.subtle.verify(	
+
     return buf2hex(signature);
 }
 
