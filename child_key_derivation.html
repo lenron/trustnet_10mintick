@@ -53,36 +53,63 @@ async function test_keygen(){
 
 }
 
+// getAddress takes a public key in a hex string as input and
+// returns a base58 encoded P2PKH (prefix 1) address.
 async function getAddress(public_key){
 	// run a SHA256 hash on the public key
-	const pubkey_buf = hex_string_to_ArrayBuffer(public_key);
+	const pubkey_buf = hexStringToArrayBuffer(public_key);
     const hashBuffer256 = await crypto.subtle.digest('SHA-256', pubkey_buf);
 	const pubkey_uint8_arr = new Uint8Array(hashBuffer256);
-	console.log('hashed, ready for ripemd160: ' + pubkey_uint8_arr);
 
 	// Take the result of the SHA256 hash and run a ripemd160 hash on it.
 	// ripemd160 takes Uint8Array and returns a Uint8Array.
 	const pubkey_h160_uint8 = await noble.ripemd160(pubkey_uint8_arr);
-	console.log('ripemd160 return array: ' + pubkey_h160_uint8);
 	// convert uint8 array to a 2 digit (1 byte) hex array.
 	var pubkey_h160 = new Array;
 	for(i=0; i < pubkey_h160_uint8.length; i++){
 		pubkey_h160.push(pubkey_h160_uint8[i].toString(16).padStart(2, '0'));
 	}
-	console.log('pubkey_h160: ' + pubkey_h160.join(''));
 
 	// compute a checksum of data that includes the prefix
 	const data = '00' + pubkey_h160.join('');
 	const checksum = await computeChecksum(data);
-	console.log('checksum: ' + checksum);
-
 	const payload = data + checksum;
-	console.log('payload: ' + payload);
-	
 	return encode_b58(payload);
-
 }
 
+// Convert an input of Uint8Array to a returned 
+
+
+//Convert hex string to array of unsigned 8-bit integers and return the ArrayBuffer.
+//A compressed 33 byte secp public key will return a 256 bit ArrayBuffer number.
+//From: https://gist.github.com/don/871170d88cf6b9007f7663fdbc23fe09
+function hexStringToArrayBuffer(hexString) {
+    // remove the leading 0x (modified this from original for ECC public keys).
+    hexString = hexString.replace(/^0./, '');
+
+    // ensure even number of characters
+    if (hexString.length % 2 != 0) {
+        console.log('WARNING: expecting an even number of characters in the hexString');
+    }
+
+    // check for some non-hex characters
+    var bad = hexString.match(/[G-Z\s]/i);
+    if (bad) {
+        console.log('WARNING: found non-hex characters', bad);
+    }
+
+    // split the string into pairs of octets
+    var pairs = hexString.match(/[\dA-F]{2}/gi);
+
+    // convert the octets to integers
+    var integers = pairs.map(function(s) {
+        return parseInt(s, 16);
+    });
+    var array = new Uint8Array(integers);
+
+    //The buffer method called here returns the ArrayBuffer.
+    return array.buffer;
+}
 
 
 
@@ -377,7 +404,7 @@ async function computeSeed512(mnemonicPhrase, in_password){
 async function computeChecksum(payload) {
 
     // Encode payload data into ArrayBuffer.
-    const hexArrayBuffer = hex_string_to_ArrayBuffer(payload);
+    const hexArrayBuffer = hexStringToArrayBuffer(payload);
 
     // Bitcoin base58check uses a double sha-256 hash.
     const hashBuffer256 = await crypto.subtle.digest('SHA-256', hexArrayBuffer);
@@ -428,11 +455,11 @@ async function hmac_sha512(data, key){
         var key_enc = new TextEncoder().encode(key);
     }else{
         // Any other input should be a hex string.
-        var key_enc = hex_string_to_ArrayBuffer(key);
+        var key_enc = hexStringToArrayBuffer(key);
     }
 
     // Encode the hex data
-    const data_encoded = hex_string_to_ArrayBuffer(data);
+    const data_encoded = hexStringToArrayBuffer(data);
 
     //CryptoKey object needed for deriveBits() to perform PBKDF2.
     const imported_key = await crypto.subtle.importKey(
