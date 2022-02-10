@@ -492,13 +492,9 @@ async function hmac_sha512(data, key){
     const imported_key = await crypto.subtle.importKey(
         "raw", // raw format of the key - should be Uint8Array
         key_enc,
-        /*{ // algorithm details
-            name: "HMAC",
-            hash: {name: "SHA-512"}
-        },*/
 		hmac_algorithm_obj,
         false, // export = false
-        ["sign"] // what this key can do
+        ["sign", "verify"] // what this key can do
     );
 
     // Perform the HMAC-SHA512 hash
@@ -508,7 +504,12 @@ async function hmac_sha512(data, key){
         data_encoded
     );
 	console.log('signature: ' + new Uint8Array(signature));
-	//const result = crypto.subtle.verify(	
+	const result = crypto.subtle.verify(hmac_algorithm_obj, imported_key, signature, key_enc);
+	if(result){
+		console.log('signature verified');
+	}else{
+		console.log('INVALID SIGNATURE');
+	}
 
     return buf2hex(signature);
 }
