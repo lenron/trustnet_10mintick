@@ -185,6 +185,8 @@ async function compute_extended_key(chain, key, depth = '00', index = '00000000'
     const serialized = version + depth + fingerprint + index + chain + key;
     console.log('serialized: ' + serialized);
     const checksum = await computeChecksum(serialized);
+	console.log('fixing checksum: ' + checksum);
+	console.log('checksum b58: ' + encode_b58(checksum));
     var extended_key = encode_b58(serialized + checksum);
     //console.log('the xprv: ' + extended_private_key);
     return extended_key;
