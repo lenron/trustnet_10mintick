@@ -72,13 +72,14 @@ async function derive_child_key(parent_chain_code, parent_key, index) {
 
 	// index must be in hex string for concatenation
 	index_hex = num2hex(index);
-	console.log('index_hex: ' + index_hex);
+	//console.log('index_hex: ' + index_hex);
 
 	// use test values from learnme to make sure we're doing this right.
 	//parent_chain_code = '463223aac10fb13f291a1bc76bc26003d98da661cb76df61e750c139826dea8b';
 	//parent_key = 'f79bb0d317b310b261a55a8ab393b4c8a1aba6fa4d08aef379caba502d5d67f9';
 
 	// set up HMAC hash 
+	// add '00' for private keys
 	const data = '00' + parent_key + index_hex;
 	const key = parent_chain_code;
 
