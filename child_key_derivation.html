@@ -157,7 +157,8 @@ async function derive_child_key(parent_chain_code, parent_key, index) {
 
 	// Use scalar addition here
 	let child_key_int = BigInt(Number.MAX_SAFE_INTEGER);
-	child_key_int = (BigInt('0x' + ikey_left) + BigInt('0x' + parent_key)) % n_order_int;
+	//child_key_int = (BigInt('0x' + ikey_left) + BigInt('0x' + parent_key)) % n_order_int;
+	child_key_int = BigInt('0x' + ikey_left) + (BigInt('0x' + parent_key) % n_order_int) ;
 	child_key_hex = num2hex(child_key_int);
 	
 	let children_keys = new Array;
