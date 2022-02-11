@@ -33,7 +33,7 @@ async function test_keygen(){
 	//parent_key = 'f79bb0d317b310b261a55a8ab393b4c8a1aba6fa4d08aef379caba502d5d67f9';
 
 	// use index 2^31 or greater to derive hardened child.
-	const results_array = await derive_child_key(chain_code, private_key, 2**31);
+	const results_array = await derive_child_key(chain_code, private_key, 2**31+1);
 	console.log('computed child key: ' + results_array[0]);
 	console.log('computed chain code: ' + results_array[1]);
 
