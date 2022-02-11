@@ -32,15 +32,37 @@ async function test_keygen(){
 	//parent_chain_code = '463223aac10fb13f291a1bc76bc26003d98da661cb76df61e750c139826dea8b';
 	//parent_key = 'f79bb0d317b310b261a55a8ab393b4c8a1aba6fa4d08aef379caba502d5d67f9';
 
+	//depth1
 	// use index 2^31 or greater to derive hardened child.
 	const results_array = await derive_child_key(chain_code, private_key, 2**31+1);
 	console.log('child key m/1h: ' + results_array[0]);
 	console.log('chain code m/1h: ' + results_array[1]);
+	const pubkey_child = await secp.getPublicKey(results_array[0], true);
+	console.log('public child key depth1: ' + pubkey_child);
+	const address_child = await getAddress(pubkey_child);
+	console.log('address of hardened child pubkey depth1: ' + address_child);
 
-	// derive depth 2 keys (m/1h/2h
+	//depth 2
+	// derive depth 2 keys (m/1h/2h)
 	const results_array_depth2 = await derive_child_key(results_array[1], results_array[0], 2);
 	console.log('child key m/1h/2h: ' + results_array_depth2[0]);
 	console.log('chain code m/1h/2h: ' + results_array_depth2[1]);
+	const pubkey_child_d2 = await secp.getPublicKey(results_array_depth2[0], true);
+	console.log('public child key depth2: ' + pubkey_child_d2);
+	const address_child_d2 = await getAddress(pubkey_child_d2);
+	console.log('address of hardened child pubkey depth2: ' + address_child_d2);
+
+	// depth 3
+	// test computing non-hardened child (m/1h/2h/3)
+	// derive public key first
+	//const pubkey_child_d2 = await secp.getPublicKey(results_array_depth2[0], true);
+	const results_normchild =  await derive_child_key(results_array_depth2[1], pubkey_child_d2, 3);
+    console.log('child key m/1h/2h/3: ' + results_normchild[0]);
+    console.log('chain code m/1h/2h/3: ' + results_normchild[1]);
+	const pubkey_child_d3 = await secp.getPublicKey(results_normchild[0], true);
+	console.log('public child key depth3: ' + pubkey_child_d2);
+	const address_child_d3 = await getAddress(pubkey_child_d3);
+	console.log('address of NORMAL child pubkey depth3: ' + address_child_d3);
 
 	// check secp
 	// 'true' option returns a compressed public key.
@@ -49,18 +71,6 @@ async function test_keygen(){
 
 	//const address = await getAddress(public_key);
 	//console.log('address of master pubkey: ' + address);
-
-	//depth1
-	const pubkey_child = await secp.getPublicKey(results_array[0], true);
-	console.log('public child key depth1: ' + pubkey_child);
-	const address_child = await getAddress(pubkey_child);
-	console.log('address of child pubkey depth1: ' + address_child);
-	//depth 2
-	const pubkey_child_d2 = await secp.getPublicKey(results_array_depth2[0], true);
-	console.log('public child key depth2: ' + pubkey_child_d2);
-	const address_child_d2 = await getAddress(pubkey_child_d2);
-	console.log('address of child pubkey depth2: ' + address_child_d2);
-
 }
 
 // Takes parent private key and chain code and computes child key and chain code.
