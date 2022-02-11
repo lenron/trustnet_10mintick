@@ -34,7 +34,7 @@ async function test_keygen(){
 
 	//depth1
 	// use index 2^31 or greater to derive hardened child.
-	const results_array = await derive_child_key(chain_code, private_key, 2**31+1);
+	const results_array = await derive_child_key(chain_code, private_key, 2**31+1, '00');
 	console.log('child key m/1h: ' + results_array[0]);
 	console.log('chain code m/1h: ' + results_array[1]);
 	const pubkey_child = await secp.getPublicKey(results_array[0], true);
@@ -44,7 +44,7 @@ async function test_keygen(){
 
 	//depth 2
 	// derive depth 2 keys (m/1h/2h)
-	const results_array_depth2 = await derive_child_key(results_array[1], results_array[0], 2);
+	const results_array_depth2 = await derive_child_key(results_array[1], results_array[0], 2**31+2, '00');
 	console.log('child key m/1h/2h: ' + results_array_depth2[0]);
 	console.log('chain code m/1h/2h: ' + results_array_depth2[1]);
 	const pubkey_child_d2 = await secp.getPublicKey(results_array_depth2[0], true);
@@ -79,7 +79,9 @@ async function test_keygen(){
 // child keys.  Indexes 2^31 to 2^32-1 will derive hardened children keys (able to derive child
 // private keys). Indexes 0 to 2^31-1 will derive normal children keys.
 // output array[0] == child key, output array[1] == child chain code.
-async function derive_child_key(parent_chain_code, parent_key, index) {
+// hardened derivation (using incoming private keys) requires a '00' prefix on the key
+// default to normal derivation with no prefix (f_private = '').
+async function derive_child_key(parent_chain_code, parent_key, index, f_private = '') {
 	// index of hardened keys must be between 2^31 and 2^32 - 1
 	// starts at m/2147483648
 	// I think this will have to be computed 
@@ -100,7 +102,8 @@ async function derive_child_key(parent_chain_code, parent_key, index) {
 
 	// set up HMAC hash 
 	// add '00' for private keys
-	const data = '00' + parent_key + index_hex;
+	//const data = '00' + parent_key + index_hex;
+	const data = f_private + parent_key + index_hex;
 	const key = parent_chain_code;
 
 	const intermediate_key = await hmac_sha512(data, key);
