@@ -159,14 +159,6 @@ async function derive_child_key(parent_chain_code, parent_key, index) {
 	let child_key_int = BigInt(Number.MAX_SAFE_INTEGER);
 	child_key_int = (BigInt('0x' + ikey_left) + BigInt('0x' + parent_key)) % n_order_int;
 	child_key_hex = num2hex(child_key_int);
-/*
-	if (child_key_hex.length != 64){
-		children_keys[0] = '0' + child_key_hex;
-		console.log('\n\n\n\n\n\n\n\n\n\n\n');
-	}else{
-		children_keys[0] = child_key_hex;
-	}
-*/
 	
 	let children_keys = new Array;
 	children_keys[0] = child_key_hex;
