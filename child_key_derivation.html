@@ -161,12 +161,8 @@ async function derive_child_key(parent_chain_code, parent_key, index) {
 	//child_key_int = BigInt('0x' + ikey_left) + (BigInt('0x' + parent_key) % n_order_int);
 	let child_key_hex = num2hex(child_key_int);
 
+	// Make sure the key is 32 bytes!
 	child_key_hex = child_key_hex.padStart(64, '0');
-/*
-	let testval = '333';
-	testval1 = testval.padStart(4, '4');
-	console.log('testval: ' + testval1);
-*/
 	
 	let children_keys = new Array;
 	children_keys[0] = child_key_hex;
