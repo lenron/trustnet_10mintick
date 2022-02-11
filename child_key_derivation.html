@@ -56,11 +56,14 @@ async function test_keygen(){
 	// test computing non-hardened child (m/1h/2h/3)
 	// derive public key first
 	//const pubkey_child_d2 = await secp.getPublicKey(results_array_depth2[0], true);
+	console.log('depth 3 inputs:');
+	console.log('chain code: ' + results_array_depth2[1]);
+	console.log('public key depth 2: ' + pubkey_child_d2);
 	const results_normchild =  await derive_child_key(results_array_depth2[1], pubkey_child_d2, 3);
-    console.log('child key m/1h/2h/3: ' + results_normchild[0]);
-    console.log('chain code m/1h/2h/3: ' + results_normchild[1]);
+    //console.log('child key m/1h/2h/3: ' + results_normchild[0]);
+    //console.log('chain code m/1h/2h/3: ' + results_normchild[1]);
 	const pubkey_child_d3 = await secp.getPublicKey(results_normchild[0], true);
-	console.log('public child key depth3: ' + pubkey_child_d2);
+	console.log('public child key depth3: ' + pubkey_child_d3);
 	const address_child_d3 = await getAddress(pubkey_child_d3);
 	console.log('address of NORMAL child pubkey depth3: ' + address_child_d3);
 
