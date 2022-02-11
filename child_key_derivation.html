@@ -157,9 +157,16 @@ async function derive_child_key(parent_chain_code, parent_key, index) {
 
 	// Use scalar addition here
 	let child_key_int = BigInt(Number.MAX_SAFE_INTEGER);
-	//child_key_int = (BigInt('0x' + ikey_left) + BigInt('0x' + parent_key)) % n_order_int;
-	child_key_int = BigInt('0x' + ikey_left) + (BigInt('0x' + parent_key) % n_order_int);
-	child_key_hex = num2hex(child_key_int);
+	child_key_int = (BigInt('0x' + ikey_left) + BigInt('0x' + parent_key)) % n_order_int;
+	//child_key_int = BigInt('0x' + ikey_left) + (BigInt('0x' + parent_key) % n_order_int);
+	let child_key_hex = num2hex(child_key_int);
+
+	child_key_hex = child_key_hex.padStart(64, '0');
+/*
+	let testval = '333';
+	testval1 = testval.padStart(4, '4');
+	console.log('testval: ' + testval1);
+*/
 	
 	let children_keys = new Array;
 	children_keys[0] = child_key_hex;
@@ -499,7 +506,7 @@ async function hmac_sha512(data, key){
         imported_key,
         data_encoded
     );
-	console.log('signature: ' + new Uint8Array(signature));
+	//console.log('signature: ' + new Uint8Array(signature));
 	const result = crypto.subtle.verify(hmac_algorithm_obj, imported_key, signature, key_enc);
 	if(result){
 		console.log('signature verified');
