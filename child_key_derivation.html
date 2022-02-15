@@ -118,7 +118,7 @@ async function derive_child_key(parent_chain_code, parent_privkey, index) {
 	let n_order_int = BigInt('0x' + n_order_hex);
 
 	// index must be in hex string for concatenation
-	index_hex = num2hex(index);
+	index_hex = num2hex(index).padStart(8, '0');
 	//console.log('index_hex: ' + index_hex);
 
 	// use test values from learnme to make sure we're doing this right.
@@ -140,7 +140,8 @@ async function derive_child_key(parent_chain_code, parent_privkey, index) {
 		data = parent_pubkey + index_hex;
 		console.log('index is less than 2**31, compute normal children');
 	}
-	
+	console.log('data: ' + data);
+	console.log('key: ' + key);
 
 	intermediate_key = await hmac_sha512(data, key);
 	//console.log('intermediate_key: ' + intermediate_key);
