@@ -46,10 +46,16 @@ async function test_keygen(){
 
 }
 
+// Takes a key tree derivation notation string, like m/31h/2345/1h,
+// and returns the keypair at that tree location.
 async function derive_key_tree(){
 
 
+    let children_keys = new Array;
+    children_keys[0] = child_key_hex;
+    children_keys[1] = child_chain_code;
 
+    return children_keys;
 }
 
 
