@@ -103,7 +103,8 @@ async function derive_child_key(parent_chain_code, parent_privkey, index) {
 
 	// The order of the elliptic curve defined in secp256k1 is a constant.
 	const n_order_hex = 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141';
-	// To do any number processing in native javascript, we have to use a BigInt.
+	// To do any number processing in the sizes of numbers and their corresponding number of 
+	// significant digits in native javascript, we have to use a BigInt.
 	let n_order_int = BigInt('0x' + n_order_hex);
 
 	// index must be in hex string for concatenation
