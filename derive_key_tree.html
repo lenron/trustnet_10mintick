@@ -16,7 +16,7 @@ let noble = nobleHashes;
 
 test_keygen();
 async function test_keygen(){
-
+/*
 	// Generate a key we know is valid
 	const sentence = await computeMnemonicPhrase();
 	console.log('mnemonic sentence: ' + sentence);
@@ -44,9 +44,10 @@ async function test_keygen(){
 	const address_child_d3 = await getAddress(pubkey_child_d3);
 	console.log('address of child key depth3: ' + address_child_d3);
 */
-	let 
 	// testing code as I build
+	let m_sentence = await computeMnemonicPhrase();
 	node_keypair = await derive_key_tree('cat dog tree', 'm/43h/3/1000h/2000/4000/10000h');
+	//node_keypair = await derive_key_tree(m_sentence, 'm/43h/3/1000h/2000/4000/10000h');
 }
 
 // Takes a key tree derivation notation string, like m/31h/2345/1h,
@@ -114,7 +115,7 @@ async function derive_key_tree(mnemonic, key_tree_str){
 
 async function get_root_keypair(mnemonic){
 
-	const seed = await computeSeed512(sentence);
+	const seed = await computeSeed512(mnemonic);
     const hashed_seed = await hmac_sha512(seed);
     const root_privkey = hashed_seed.substring(0,64);
     const root_chain_code = hashed_seed.substring(64,128);
