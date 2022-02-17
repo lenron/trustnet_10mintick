@@ -56,6 +56,9 @@ async function derive_key_tree(mnemonic, key_tree_str){
 	// and 1st returning chain code.
 	//
 	// how do we know the root key? derive from a mnemonic sentence.
+	// first build an array with the key index corresponding to the arr index.
+	// use regex.
+	let key_index_arr = new Array;
 
 
     let children_keys = new Array;
