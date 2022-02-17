@@ -69,12 +69,15 @@ async function derive_key_tree(mnemonic, key_tree_str){
 	if( key_tree_str.substring(0,1) != 'm'){
 		console.log('key_tree_str should start with "m"!');
 	}
+
 	// load array to process index values
 	tree_index_arr = key_tree_str.split('/');
 	// process 
-	for(i=0; i < tree_index_arr.length; i++){
+	for(i=1; i < tree_index_arr.length; i++){
 		console.log('i: ' + i + ' tree index: ' + tree_index_arr[i]);
-		//if( 
+		if( tree_index_arr[i].test(/[^0-9h]/) ){
+			console.log('Detected invalid key tree character!');
+		}else if( tree_index_arr[i].match
 	}
 
 
