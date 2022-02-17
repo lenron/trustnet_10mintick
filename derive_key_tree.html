@@ -60,6 +60,15 @@ async function derive_key_tree(mnemonic, key_tree_str){
 	// use regex.
 	let key_index_arr = new Array;
 
+	// make sure we're starting with 'm' and in the proper format
+	if( mnemonic.match(/^m\/[0-9]+h?\//){
+		// strip off each index and move to the next in the mnemonic str.
+		//while( mnemonic.match(/^m\/([0-9]+h?)/
+
+	}else{
+		throw('derivation tree string formatted incorrectly.');
+	}
+
 
     let children_keys = new Array;
     //children_keys[0] = child_privkey_hex;
