@@ -26,7 +26,7 @@ async function test_keygen(){
 	const chain_code = hashed_seed.substring(64,128);
 	const root_private_key = await compute_extended_key(chain_code, '00' + private_key);
 	console.log('root extended private key: ' + root_private_key);
-
+/*
 	//depth1
 	const results_array = await derive_child_privkey(chain_code, private_key, 2);
 	const pubkey_child = await secp.getPublicKey(results_array[0], true);
@@ -43,7 +43,10 @@ async function test_keygen(){
 	const pubkey_child_d3 = await secp.getPublicKey(results_normchild[0], true);
 	const address_child_d3 = await getAddress(pubkey_child_d3);
 	console.log('address of child key depth3: ' + address_child_d3);
-
+*/
+	let 
+	// testing code as I build
+	node_keypair = derive_key_tree('cat dog tree', 'm/43h/3');
 }
 
 // Takes a key tree derivation notation string, like m/31h/2345/1h,
@@ -58,10 +61,19 @@ async function derive_key_tree(mnemonic, key_tree_str){
 	// how do we know the root key? derive from a mnemonic sentence.
 	// first build an array with the key index corresponding to the arr index.
 	// use regex.
-	let key_index_arr = new Array;
+	let keypair_arr = new Array;
+	let tree_index_arr = new Array;
 
+	// load array to process index values
+	tree_index_arr = key_tree_str.split('/');
+	for(i=0; i < tree_index_arr.length; i++){
+		console.log('i: ' + i + ' tree index: ' + tree_index_arr[i]);
+	}
+
+
+/*
 	// make sure we're starting with 'm' and in the proper format
-	if( mnemonic.match(/^m\/[0-9]+h?/){
+	if( mnemonic.match(/^m(\/[0-9]+h?)+/){
 		// root index is always 0
 		key_index_arr.push(0);
 		// strip of the m
@@ -76,7 +88,7 @@ async function derive_key_tree(mnemonic, key_tree_str){
 	}else{
 		throw('derivation tree string formatted incorrectly.');
 	}
-
+*/
 
     let children_keys = new Array;
     //children_keys[0] = child_privkey_hex;
