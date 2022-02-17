@@ -68,7 +68,7 @@ async function derive_key_tree(mnemonic, key_tree_str){
 	console.log('input- key_tree_str: ' + key_tree_str);
 	
 	// check validity of the mnemonic
-	if( verifyMnemonicPhrase(mnemonic) ){
+	if( await verifyMnemonicPhrase(mnemonic) ){
 		console.log('mnemonic phrase verified!');
 	}else{
 		console.log('mnemonic phrase INVALID!');
@@ -104,7 +104,7 @@ async function derive_key_tree(mnemonic, key_tree_str){
 	let keypair_arr = new Array;
 	// start with root master key
 	keypair_arr.push(await get_root_keypair(mnemonic));
-	console.log('root extended key: ' + await compute_extended_key(keypair_arr[0][1], '00' + keypair_arr[0][0]));	
+	console.log('root extended key: ' + await compute_extended_key(keypair_arr[0][1], '00' + keypair_arr[0][0]));
 
     let children_keys = new Array;
     //children_keys[0] = child_privkey_hex;
