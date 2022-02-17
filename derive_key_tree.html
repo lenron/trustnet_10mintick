@@ -61,9 +61,17 @@ async function derive_key_tree(mnemonic, key_tree_str){
 	let key_index_arr = new Array;
 
 	// make sure we're starting with 'm' and in the proper format
-	if( mnemonic.match(/^m\/[0-9]+h?\//){
+	if( mnemonic.match(/^m\/[0-9]+h?/){
+		// root index is always 0
+		key_index_arr.push(0);
+		// strip of the m
+		mnemonic = mnemonic.substring(1);
 		// strip off each index and move to the next in the mnemonic str.
-		//while( mnemonic.match(/^m\/([0-9]+h?)/
+		while( mnemonic.match(/^\/([0-9]+h?)/ ){
+			// convert the h into 2**31 added to the number.
+			if
+
+		}
 
 	}else{
 		throw('derivation tree string formatted incorrectly.');
