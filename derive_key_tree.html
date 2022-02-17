@@ -64,10 +64,17 @@ async function derive_key_tree(mnemonic, key_tree_str){
 	let keypair_arr = new Array;
 	let tree_index_arr = new Array;
 
+	// this function should only work on private keys
+	console.log(key_tree_str.substring(0,1));
+	if( key_tree_str.substring(0,1) != 'm'){
+		console.log('key_tree_str should start with "m"!');
+	}
 	// load array to process index values
 	tree_index_arr = key_tree_str.split('/');
+	// process 
 	for(i=0; i < tree_index_arr.length; i++){
 		console.log('i: ' + i + ' tree index: ' + tree_index_arr[i]);
+		//if( 
 	}
 
 
