@@ -61,11 +61,17 @@ async function derive_key_tree(mnemonic, key_tree_str){
 	// how do we know the root key? derive from a mnemonic sentence.
 	// first build an array with the key index corresponding to the arr index.
 	// use regex.
-	let keypair_arr = new Array;
 	let tree_index_arr = new Array;
 
 	console.log('input- mnemonic: ' + mnemonic);
 	console.log('input- key_tree_str: ' + key_tree_str);
+	
+	// check validity of the mnemonic
+	if( verifyMnemonicPhrase(mnemonic) ){
+		console.log('mnemonic phrase verified!');
+	}else{
+		console.log('mnemonic phrase INVALID!');
+	}
 
 	// load array to process index values
 	tree_index_arr = key_tree_str.split('/');
@@ -93,8 +99,11 @@ async function derive_key_tree(mnemonic, key_tree_str){
 		console.log('resulting index value: ' + tree_index_arr[i]);
 	}
 
-	// process through key tree and fill keypair_arr for potential future need
-
+	// build keypair array
+	let keypair_arr = new Array;
+	// start with root master key
+	keypair_arr.push(await get_root_keypair(mnemonic));
+	console.log('root extended key: ' + await compute_extended_key(keypair_arr[0][1], '00' + keypair_arr[0][0]));	
 
     let children_keys = new Array;
     //children_keys[0] = child_privkey_hex;
@@ -103,7 +112,18 @@ async function derive_key_tree(mnemonic, key_tree_str){
     return children_keys;
 }
 
+async function get_root_keypair(mnemonic){
 
+	const seed = await computeSeed512(sentence);
+    const hashed_seed = await hmac_sha512(seed);
+    const root_privkey = hashed_seed.substring(0,64);
+    const root_chain_code = hashed_seed.substring(64,128);
+
+    let root_keys = new Array;
+    root_keys[0] = root_privkey;
+    root_keys[1] = root_chain_code;
+    return root_keys;
+}
 
 
 </script>
