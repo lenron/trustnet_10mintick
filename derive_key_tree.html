@@ -74,20 +74,23 @@ async function derive_key_tree(mnemonic, key_tree_str){
 	tree_index_arr = key_tree_str.split('/');
 	// process 
 	for(i=1; i < tree_index_arr.length; i++){
-		console.log('i: ' + i + ' tree index: ' + tree_index_arr[i]);
-		if( tree_index_arr[i].test(/[^0-9h]/) ){
+		//console.log('i: ' + i + ' tree index: ' + tree_index_arr[i]);
+		test = tree_index_arr[i];
+		//if( str(tree_index_arr[i]).test(/[^0-9h]/) ){
+		if( test.test(/[^0-9h]/) ){
 			console.log('Detected invalid key tree character!');
 		// convert hardened index to number for easier use
-		}else if( tree_index_arr[i].test(/^[0-9]+h$/){
+		} else if( tree_index_arr[i].test(/^[0-9]+h$/)){
 			index = tree_index_arr[i].match(/^([0-9]+)h$/);
 			tree_index_arr[i] = index + 2**31;
 		// continue, normal index is in proper form
-		}else if( tree_index_arr[i].test(/^[0-9]+$/){
+		}else if( tree_index_arr[i].test(/^[0-9]+$/)){
 			continue;
 		// the 'h' is in the wrong spot 
 		}else{
-			console.log('key tree is invalid!);
+			console.log('key tree is invalid!');
 		}
+		console.log('resulting index value: ' + tree_index_arr[i]);
 	}
 
 
