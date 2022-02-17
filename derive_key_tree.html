@@ -64,6 +64,9 @@ async function derive_key_tree(mnemonic, key_tree_str){
 	let keypair_arr = new Array;
 	let tree_index_arr = new Array;
 
+	console.log('input- mnemonic: ' + mnemonic);
+	console.log('input- key_tree_str: ' + key_tree_str);
+
 	// this function should only work on private keys
 	console.log(key_tree_str.substring(0,1));
 	if( key_tree_str.substring(0,1) != 'm'){
@@ -74,17 +77,20 @@ async function derive_key_tree(mnemonic, key_tree_str){
 	tree_index_arr = key_tree_str.split('/');
 	// process 
 	for(i=1; i < tree_index_arr.length; i++){
-		//console.log('i: ' + i + ' tree index: ' + tree_index_arr[i]);
-		test = tree_index_arr[i];
-		//if( str(tree_index_arr[i]).test(/[^0-9h]/) ){
-		if( test.test(/[^0-9h]/) ){
+		console.log('i: ' + i + ' tree index: ' + tree_index_arr[i]);
+		//test = tree_index_arr[i];
+		if( /[^0-9h]/.test(tree_index_arr[i]) ){
+		//if( test.test(/[^0-9h]/) ){
 			console.log('Detected invalid key tree character!');
 		// convert hardened index to number for easier use
-		} else if( tree_index_arr[i].test(/^[0-9]+h$/)){
+		} else if( /^[0-9]+h$/.test(tree_index_arr[i]) ){
+		//} else if( tree_index_arr[i].test(/^[0-9]+h$/)){
 			index = tree_index_arr[i].match(/^([0-9]+)h$/);
+			//index = /^([0-9]+)h$/.match(tree_index_arr[i]);
 			tree_index_arr[i] = index + 2**31;
 		// continue, normal index is in proper form
-		}else if( tree_index_arr[i].test(/^[0-9]+$/)){
+		}else if( /^[0-9]+$/.test(tree_index_arr[i]) ){
+		//}else if( tree_index_arr[i].test(/^[0-9]+$/)){
 			continue;
 		// the 'h' is in the wrong spot 
 		}else{
