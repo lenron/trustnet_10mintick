@@ -34,7 +34,7 @@ async function test_keygen(){
 
 // Takes a key tree derivation notation string, like m/31h/2345/1h,
 // and a mnemonic sentence for the seed.
-// and returns the keypair at that tree location.
+// returns an array with index 0:privkey, 1:chain code, 2:address, 3:xprv and 4:xpub
 async function derive_key_tree(mnemonic, key_tree_str){
 	// Decode the key tree, associating an index with each level.
 	// build an array where the array index matches the depth level
