@@ -18,8 +18,12 @@ test_keygen();
 async function test_keygen(){
 	// testing code as I build
 	let m_sentence = await computeMnemonicPhrase();
-	//node_keypair = await derive_key_tree('cat dog tree', 'm/43h/3/1000h/2000/4000/10000h');
-	node_keyset = await derive_key_tree(m_sentence, 'm/43h/3/1000h/2000/4000/10000h/2000000000');
+	//node_keyset = await derive_key_tree('cat dog tree', 'm/43h/3/1000h/20h00/4000/10000h');
+	//node_keyset = await derive_key_tree('cat dog tree', 'm8/43h/3/1000h/2000/4000/10000h');
+	//node_keyset = await derive_key_tree('cat dog tree', 'm8/43h/3/1000h/2000/4000/10000h');
+	//node_keyset = await derive_key_tree('cat dog tree', 'm/43h/3/1000h/2000/4000/10000h');
+	node_keyset = await derive_key_tree(m_sentence, 'm/43h/3/1000h/2000/4000/10000h/20000000001');
+	//node_keyset = await derive_key_tree(m_sentence, 'm/43h/3/1000h/2000/4000/10000h/2000000000');
 	//node_keyset = await derive_key_tree(m_sentence, 'm/0h');
 	console.log('node privkey: ' + node_keyset[0]);
 	console.log('node chain code: ' + node_keyset[1]);
@@ -32,7 +36,7 @@ async function test_keygen(){
 // and a mnemonic sentence for the seed.
 // and returns the keypair at that tree location.
 async function derive_key_tree(mnemonic, key_tree_str){
-	// Decode the key tree, associating an index with each level
+	// Decode the key tree, associating an index with each level.
 	// build an array where the array index matches the depth level
 	// each index returns a 2 deep array with 0th returning privkey
 	// and 1st returning chain code.
@@ -42,6 +46,7 @@ async function derive_key_tree(mnemonic, key_tree_str){
 	// use regex.
 	let tree_index_arr = new Array;
 
+	// for show
 	console.log('input- mnemonic: ' + mnemonic);
 	console.log('input- key_tree_str: ' + key_tree_str);
 	
@@ -65,22 +70,26 @@ async function derive_key_tree(mnemonic, key_tree_str){
 
 	// convert hardened notation into numbers and check if valid
 	for(i=1; i < tree_index_arr.length; i++){
-//		console.log('i: ' + i + ' tree index: ' + tree_index_arr[i]);
-		//test = tree_index_arr[i];
 		if( /[^0-9h]/.test(tree_index_arr[i]) ){
 			console.log('Detected invalid key tree character!');
 		// convert hardened index to number for easier use
 		} else if( /^[0-9]+h$/.test(tree_index_arr[i]) ){
 			index = tree_index_arr[i].match(/^([0-9]+)h$/);
-			tree_index_arr[i] = parseInt(index) + 2**31;
+			if( parseInt(index) < 2**31 ){
+				tree_index_arr[i] = parseInt(index) + 2**31;
+			}else{
+				console.log('Error: index cannot exceed 2**31-1!');
+			}
 		// continue, normal index is in proper form
 		}else if( /^[0-9]+$/.test(tree_index_arr[i]) ){
-			//index_n = tree_index_arr[i].match(/^([0-9]+)$/);
-			tree_index_arr[i] = parseInt(tree_index_arr[i]);
+			if( parseInt(tree_index_arr[i]) < 2**31 ){
+				tree_index_arr[i] = parseInt(tree_index_arr[i]);
+			}else{
+				console.log('Error: index cannot exceed 2**31-1!');
+			}
 		}else{// the 'h' is in the wrong spot 
 			console.log('key tree is invalid!');
 		}
-//		console.log('resulting index value: ' + tree_index_arr[i]);
 	}
 
 	// build keypair array
@@ -97,12 +106,8 @@ async function derive_key_tree(mnemonic, key_tree_str){
 	const depth = tree_index_arr.length-1;
 	const return_index = tree_index_arr[depth];
 	// compute with parent private key
-	console.log('root privkey: ' + keypair_arr[0][0]);
-	console.log('parent privkey: ' + keypair_arr[depth-1][0]);
 	const parent_pubkey = await secp.getPublicKey(keypair_arr[depth-1][0], true);
-	console.log('parent pubkey: ' + parent_pubkey);
 	const hash160_parent = await hash160(parent_pubkey);
-	console.log('hash160 parent: ' + hash160_parent);
 	const fingerprint = hash160_parent.substring(0,8);
 	const return_privkey = keypair_arr[depth][0];
 	const return_chain = keypair_arr[depth][1];
@@ -124,10 +129,6 @@ async function derive_key_tree(mnemonic, key_tree_str){
 	full_keyset_arr[3] = return_xpriv;
 	full_keyset_arr[4] = return_xpub;
 	return full_keyset_arr;
-
-//	console.log('built keypair_arr:' + keypair_arr);
-//	console.log('target keypair:' + keypair_arr[tree_index_arr.length-1]);	
-//    return keypair_arr[tree_index_arr.length-1];
 }
 
 /*
