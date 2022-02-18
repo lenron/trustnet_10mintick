@@ -118,10 +118,31 @@ async function derive_key_tree(mnemonic, key_tree_str){
 		keypair_arr.push(await derive_child_privkey(keypair_arr[j-1][1], keypair_arr[j-1][0], tree_index_arr[j]));
 	}
 
+	// these should be numbers
+	const depth = tree_index_arr.length-1;
+	const index = tree_index_arr[depth];
+	// compute with parent private key
+	const parent_pubkey = await secp.getPublicKey(keypair_arr[depth-1][0]);
+	const hash160_parent = await hash160(parent_pubkey);
+	const fingerprint = hash160_parent.substring(0,8);
+	const return_privkey = keypair_arr[depth][0];
+	const return_chain = keypair_arr[depth][1];
+	const return_pubkey = await secp.getPublicKey(return_privkey, true);
+	const return_address = await getAddress(return_pubkey);
+
+	const depth_hex = num2hex(depth).padStart(2, '0')
+
+	const return_xpriv = await serialize_key(return_chain, '00' + return_privkey, tree_index_arr.length, last_index, fingerprint);
+
+
+
+	// build full keyset array (privkey, chain code, address, xpriv, xpub)
+	let full_keyset_arr = new Array;
+
+
 //	console.log('built keypair_arr:' + keypair_arr);
 //	console.log('target keypair:' + keypair_arr[tree_index_arr.length-1]);	
-	
-    return keypair_arr[tree_index_arr.length-1];
+//    return keypair_arr[tree_index_arr.length-1];
 }
 
 /*
