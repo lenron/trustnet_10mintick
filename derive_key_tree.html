@@ -16,34 +16,6 @@ let noble = nobleHashes;
 
 test_keygen();
 async function test_keygen(){
-/*
-	// Generate a key we know is valid
-	const sentence = await computeMnemonicPhrase();
-	console.log('mnemonic sentence: ' + sentence);
-	const seed = await computeSeed512(sentence);
-	const hashed_seed = await hmac_sha512(seed);
-	const private_key = hashed_seed.substring(0,64);
-	const chain_code = hashed_seed.substring(64,128);
-	const root_private_key = await compute_extended_key(chain_code, '00' + private_key);
-	console.log('root extended private key: ' + root_private_key);
-/*
-	//depth1
-	const results_array = await derive_child_privkey(chain_code, private_key, 2);
-	const pubkey_child = await secp.getPublicKey(results_array[0], true);
-	const address_child = await getAddress(pubkey_child);
-	console.log('address of child key depth1: ' + address_child);
-	//depth 2
-	const results_array_depth2 = await derive_child_privkey(results_array[1], results_array[0], 2**31+2);
-	const pubkey_child_d2 = await secp.getPublicKey(results_array_depth2[0], true);
-	const address_child_d2 = await getAddress(pubkey_child_d2);
-	console.log('address of child key depth2: ' + address_child_d2);
-
-	// depth 3
-	const results_normchild = await derive_child_privkey(results_array_depth2[1], results_array_depth2[0], 3);
-	const pubkey_child_d3 = await secp.getPublicKey(results_normchild[0], true);
-	const address_child_d3 = await getAddress(pubkey_child_d3);
-	console.log('address of child key depth3: ' + address_child_d3);
-*/
 	// testing code as I build
 	let m_sentence = await computeMnemonicPhrase();
 	//node_keypair = await derive_key_tree('cat dog tree', 'm/43h/3/1000h/2000/4000/10000h');
