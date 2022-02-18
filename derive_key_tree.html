@@ -120,7 +120,7 @@ async function derive_key_tree(mnemonic, key_tree_str){
 	let keypair_arr = new Array;
 	// start with root master key
 	keypair_arr.push(await get_root_keypair(mnemonic));
-	console.log('root extended key: ' + await compute_extended_key(keypair_arr[0][1], '00' + keypair_arr[0][0]));
+	console.log('root extended key: ' + await serialize_key(keypair_arr[0][1], '00' + keypair_arr[0][0]));
 	// compute and store the rest
 	for(j=1; j < tree_index_arr.length; j++){
 		keypair_arr.push(await derive_child_privkey(keypair_arr[j-1][1], keypair_arr[j-1][0], tree_index_arr[j]));
