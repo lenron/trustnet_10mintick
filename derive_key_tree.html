@@ -104,6 +104,7 @@ async function derive_key_tree(mnemonic, key_tree_str){
 	// compute with parent private key
 	const parent_pubkey = await secp.getPublicKey(keypair_arr[depth-1][0]);
 	const hash160_parent = await hash160(parent_pubkey);
+	console.log('hash160 parent: ' + hash160_parent);
 	const fingerprint = hash160_parent.substring(0,8);
 	const return_privkey = keypair_arr[depth][0];
 	const return_chain = keypair_arr[depth][1];
