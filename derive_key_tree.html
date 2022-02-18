@@ -107,7 +107,7 @@ async function derive_key_tree(mnemonic, key_tree_str){
 		}
 //		console.log('resulting index value: ' + tree_index_arr[i]);
 	}
-/*
+
 	// build keypair array
 	let keypair_arr = new Array;
 	// start with root master key
@@ -117,8 +117,14 @@ async function derive_key_tree(mnemonic, key_tree_str){
 	for(j=1; j < tree_index_arr.length; j++){
 		keypair_arr.push(await derive_child_privkey(keypair_arr[j-1][1], keypair_arr[j-1][0], tree_index_arr[j]));
 	}
-*/
 
+//	console.log('built keypair_arr:' + keypair_arr);
+//	console.log('target keypair:' + keypair_arr[tree_index_arr.length-1]);	
+	
+    return keypair_arr[tree_index_arr.length-1];
+}
+
+/*
 	// build full keyset array (privkey, chain code, address, xpriv, xpub)
 	let full_keyset_arr = new Array;
 	// start with root master key
@@ -134,13 +140,20 @@ async function derive_key_tree(mnemonic, key_tree_str){
 	root_keyset_arr[3] = root_xpriv;
 	root_keyset_arr[4] = root_xpub;
 
-	full_keyset_arr.push(
-
-//	console.log('built keypair_arr:' + keypair_arr);
-//	console.log('target keypair:' + keypair_arr[tree_index_arr.length-1]);	
+	full_keyset_arr.push( root_keyset_arr );
 	
-    return keypair_arr[tree_index_arr.length-1];
-}
+	for(j=1; j < tree_index_arr.length; j++){
+
+		curr_keypair = await get_root_keypair(mnemonic);
+		curr_pubkey = await secp.getPublicKey(root_keypair[0], true);
+		curr_address = await getAddress(root_pubkey);
+		curr_xpriv = await serialize_key(root_keypair[1], '00' + root_keypair[0]);
+		curr_xpub = await serialize_key(root_keypair[1], root_pubkey);
+
+
+        keypair_arr.push(await derive_child_privkey(keypair_arr[j-1][1], keypair_arr[j-1][0], tree_index_arr[j]));
+    }
+*/
 
 
 </script>
